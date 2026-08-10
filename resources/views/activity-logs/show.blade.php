@@ -1,13 +1,13 @@
 @extends('layouts.app')
 
-@section('title', 'Activity Detail')
+@section('title', 'Activity Logs')
 
 @section('content')
-    <h2>Activity Detail</h2>
+    <h2>Activity Logs</h2>
 
     <div class="card">
         <div class="card-body">
-            <p><strong>Tarehe:</strong> {{ $activityLog->created_at->format('d M Y H:i:s') }}</p>
+            <p><strong>Date:</strong> {{ $activityLog->created_at->format('d M Y H:i:s') }}</p>
             <p><strong>User:</strong> {{ $activityLog->user->name ?? 'System' }}</p>
             <p><strong>Action:</strong> <strong>{{ ucfirst($activityLog->action) }}</strong></p>
             <p><strong>Model:</strong> {{ class_basename($activityLog->model_type) }} #{{ $activityLog->model_id }}</p>

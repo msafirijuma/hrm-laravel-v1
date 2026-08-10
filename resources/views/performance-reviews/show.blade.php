@@ -7,7 +7,7 @@
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h2>Performance Review</h2>
             <a href="{{ route('performance-reviews.index') }}" class="btn btn-secondary">
-                ← Rudi kwenye Reviews
+                <i class="fas fa-arrow-left me-2"></i> Back to Reviews
             </a>
         </div>
 
@@ -22,14 +22,14 @@
             <div class="card-body">
                 <div class="row mb-4">
                     <div class="col-md-6">
-                        <strong>Mfanyakazi:</strong> {{ $performanceReview->employee->first_name }} {{ $performanceReview->employee->last_name }}<br>
-                        <strong>Namba:</strong> {{ $performanceReview->employee->employee_number }}<br>
-                        <strong>Idara:</strong> {{ $performanceReview->employee->department->name ?? '-' }}<br>
-                        <strong>Cheo:</strong> {{ $performanceReview->employee->position->name ?? '-' }}
+                        <strong>Employee:</strong> {{ $performanceReview->employee->first_name }} {{ $performanceReview->employee->last_name }}<br>
+                        <strong>Number:</strong> {{ $performanceReview->employee->employee_number }}<br>
+                        <strong>Department:</strong> {{ $performanceReview->employee->department->name ?? '-' }}<br>
+                        <strong>Position:</strong> {{ $performanceReview->employee->position->name ?? '-' }}
                     </div>
                     <div class="col-md-6 text-md-end">
                         <strong>Reviewed By:</strong> {{ $performanceReview->reviewer->name ?? 'N/A' }}<br>
-                        <strong>Tarehe:</strong> {{ $performanceReview->created_at->format('d M Y H:i') }}<br>
+                        <strong>Date:</strong> {{ $performanceReview->created_at->format('d M Y H:i') }}<br>
                         <strong>Rating:</strong> 
                         <span class="badge bg-{{ $performanceReview->rating >= 4 ? 'success' : ($performanceReview->rating >= 3 ? 'warning' : 'danger') }} fs-5">
                             {{ $performanceReview->rating }} / 5
@@ -41,7 +41,7 @@
 
                 <!-- Strengths -->
                 <div class="mb-4">
-                    <h5 class="text-success"><i class="fas fa-thumbs-up"></i> Strengths (Mambo Mazuri)</h5>
+                    <h5 class="text-success"><i class="fas fa-thumbs-up"></i> Strengths (Good tiding)</h5>
                     <div class="p-3 bg-light border rounded">
                         {{ $performanceReview->strengths }}
                     </div>

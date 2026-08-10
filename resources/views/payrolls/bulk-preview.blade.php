@@ -11,7 +11,7 @@
 
         <div class="card">
             <div class="card-body">
-                <table class="table table-bordered table-hover">
+                <table class="table table-bordered table-hover" id="payrollTable">
                     <thead class="table-dark">
                         <tr>
                             <th>Employee</th>
@@ -59,7 +59,7 @@
             <button type="submit" class="btn btn-success btn-lg px-5">
                 <i class="fas fa-check"></i> Generate All Payrolls
             </button>
-            <a href="{{ route('payrolls.bulk.create') }}" class="btn btn-secondary btn-lg">Rudi</a>
+            <a href="{{ route('payrolls.bulk.create') }}" class="btn btn-secondary btn-lg">Back</a>
         </div>
     </form>
 @endsection

@@ -6,27 +6,20 @@
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h2>My Leave Requests</h2>
         <a href="{{ route('apply-leave') }}" class="btn btn-primary">
-            <i class="fas fa-plus"></i> Omba Likizo Mpya
+            <i class="fas fa-plus"></i> Apply New Leave
         </a>
     </div>
 
-    @if(session('success'))
-        <div class="alert alert-success alert-dismissible fade show">
-            {{ session('success') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-        </div>
-    @endif
-
     <div class="card">
         <div class="card-body">
-            <table class="table table-bordered table-hover">
+            <table class="table table-bordered table-hover" id="leaveTable">
                 <thead class="table-dark">
                     <tr>
                         <th>#</th>
-                        <th>Aina ya Likizo</th>
-                        <th>Tarehe za Likizo</th>
-                        <th>Siku</th>
-                        <th>Sababu</th>
+                        <th>Leave ype</th>
+                        <th>Leave Period</th>
+                        <th>Days</th>
+                        <th>Reason</th>
                         <th>Status</th>
                         <th>Actions</th>
                     </tr>
@@ -53,20 +46,19 @@
                         </td>
                         <td>
                             @if($leave->status == 'pending')
-                                <!-- FORM YA SIRI YA KUGHAIRI OMBI -->
-                                <form id="delete-form-{{ $leave->id }}" action="{{ route('leave-requests.destroy', $leave->id) }}" method="POST" style="display: none;">
+                                <form id="delete-form-{{ $leave->id }}" action="{{ route('leave-requests.destroy', $leave->id) }}" method="POST" enctype="multipart/form-data" style="display: none;">
                                     @csrf
                                     @method('DELETE')
                                 </form>
 
-                                <!-- Edit Button with SweetAlert -->
+                                <!-- Edit Button -->
                                 <button type="button" onclick="confirmEdit({{ $leave->id }})" class="btn btn-sm btn-warning">
-                                    <i class="fas fa-edit"></i> Hariri
+                                    <i class="fas fa-edit"></i> Edit
                                 </button>
                                 
-                                <!-- Cancel Button with SweetAlert -->
+                                <!-- Cancel Button -->
                                 <button type="button" onclick="cancelLeave({{ $leave->id }})" class="btn btn-sm btn-danger">
-                                    <i class="fas fa-trash"></i> Ghairi
+                                    <i class="fas fa-trash"></i> Cancel
                                 </button>
                             @else
                                 <span class="text-muted">—</span>
@@ -80,18 +72,18 @@
                         <div class="modal-dialog modal-dialog-centered">
                             <div class="modal-content">
                                 <div class="modal-header bg-danger text-white">
-                                    <h5 class="modal-title">Sababu ya Kukataliwa</h5>
+                                    <h5 class="modal-title">Reasons of Rejection</h5>
                                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                                 </div>
                                 <div class="modal-body">
-                                    <p><strong>Aina ya Likizo:</strong> {{ $leave->leaveType->name }}</p>
-                                    <p><strong>Tarehe:</strong> {{ $leave->start_date->format('d M Y') }} - {{ $leave->end_date->format('d M Y') }}</p>
+                                    <p><strong>Leave Type:</strong> {{ $leave->leaveType->name }}</p>
+                                    <p><strong>Date:</strong> {{ $leave->start_date->format('d M Y') }} - {{ $leave->end_date->format('d M Y') }}</p>
                                     <hr>
-                                    <strong>Sababu:</strong>
-                                    <p class="mt-2">{{ $leave->rejection_reason ?? 'Hakuna sababu iliyotolewa.' }}</p>
+                                    <strong>Reason:</strong>
+                                    <p class="mt-2">{{ $leave->rejection_reason ?? 'No reason stated.' }}</p>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Funga</button>
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                                 </div>
                             </div>
                         </div>
@@ -99,9 +91,9 @@
                     @endif
 
                     @empty
-                    <tr>
-                        <td colspan="7" class="text-center py-4">Haujapata kuomba likizo yoyote bado.</td>
-                    </tr>
+                    {{-- <tr>
+                        <td colspan="7" class="text-center py-4">You did not apply for any leave yet.</td>
+                    </tr> --}}
                     @endforelse
                 </tbody>
             </table>
@@ -110,26 +102,25 @@
 @endsection
 
 @section('scripts')
-<script src="https://jsdelivr.net"></script>
 <script>
-// 1. Uthibitisho wa Hariri (Pamoja na Loader)
+// Confirm edit
 function confirmEdit(id) {
     Swal.fire({
-        title: 'Una uhakika?',
-        text: "Unataka kuhariri taarifa za ombi hili la likizo?",
+        title: 'Are you sure?',
+        text: "You are editing leave request information",
         icon: 'question',
         showCancelButton: true,
         confirmButtonColor: '#ffc107',
         cancelButtonColor: '#6c757d',
-        confirmButtonText: 'Ndiyo, Hariri!',
-        cancelButtonText: 'Ghairi',
-        allowOutsideClick: false // Inazuia kubonyeza pembeni wakati inaprocess
+        confirmButtonText: 'Yes, Edit!',
+        cancelButtonText: 'Cancel',
+        allowOutsideClick: false 
     }).then((result) => {
         if (result.isConfirmed) {
-            // Huu hapa ndio loader wetu wakati ukurasa unajibadili
+            
             Swal.fire({
-                title: 'Tafadhali subiri...',
-                text: 'Tunafungua ukurasa wa marekebisho',
+                title: 'Please wait...',
+                text: 'We are opening edit form page',
                 allowOutsideClick: false,
                 didOpen: () => {
                     Swal.showLoading();
@@ -140,24 +131,24 @@ function confirmEdit(id) {
     });
 }
 
-// 2. Uthibitisho wa Kughairi (Pamoja na Loader wakati form inasubmit)
+// Cancel Leave
 function cancelLeave(id) {
     Swal.fire({
-        title: 'Una uhakika?',
-        text: "Utakuwa unaghairi ombi la likizo hili kabisa!",
+        title: 'Are you sure?',
+        text: "You will cancel this leave request!",
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#d33',
         cancelButtonColor: '#3085d6',
-        confirmButtonText: 'Ndiyo, Ghairi!',
-        cancelButtonText: 'Sio sasa',
+        confirmButtonText: 'Yes, Cancel!',
+        cancelButtonText: 'Not now',
         allowOutsideClick: false
     }).then((result) => {
         if (result.isConfirmed) {
-            // Huu hapa ndio loader wakati data inafutwa kwenye database
+            
             Swal.fire({
-                title: 'Tunashughulikia...',
-                text: 'Tafadhali subiri kidogo wakati ombi linaghairiwa',
+                title: 'Processing...',
+                text: 'Please wait while a request is being cancelled.',
                 allowOutsideClick: false,
                 didOpen: () => {
                     Swal.showLoading();

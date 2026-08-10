@@ -4,7 +4,7 @@
 
 @section('content')
     <div class="container">
-        <h2 class="mb-4">Taarifa Zangu</h2>
+        <h2 class="mb-4">My Profile</h2>
 
         <div class="row">
             <!-- Left Side - Photo & Basic Info -->
@@ -27,10 +27,10 @@
                 </div>
 
                 <a href="{{ route('profile.edit') }}" class="btn btn-primary w-100 mb-2">
-                    <i class="fas fa-edit"></i> Hariri Profile
+                    <i class="fas fa-edit"></i> Edit Profile
                 </a>
                 <a href="{{ route('password.change') }}" class="btn btn-outline-primary w-100">
-                    <i class="fas fa-key"></i> Badilisha Nenosiri
+                    <i class="fas fa-key"></i> Change Password
                 </a>
             </div>
 
@@ -38,7 +38,7 @@
             <div class="col-lg-8">
                 <div class="card shadow-sm">
                     <div class="card-header bg-primary text-white">
-                        <h5 class="mb-0">Maelezo Yangu</h5>
+                        <h5 class="mb-0">Information</h5>
                     </div>
                     <div class="card-body">
                         <div class="row g-4">
@@ -46,24 +46,24 @@
                                 <strong>Email:</strong><br> {{ Auth::user()->email }}
                             </div>
                             <div class="col-md-6">
-                                <strong>Simu:</strong><br> {{ $employee->phone ?? '—' }}
+                                <strong>Phone:</strong><br> {{ $employee->phone ?? '—' }}
                             </div>
                             <div class="col-md-6">
-                                <strong>Tarehe ya Kuzaliwa:</strong><br> 
+                                <strong>Date of Birth:</strong><br> 
                                 {{ $employee->date_of_birth ? $employee->date_of_birth->format('d M Y') : 'Haijajazwa' }}
                             </div>
                             <div class="col-md-6">
-                                <strong>Tarehe ya Kuajiriwa:</strong><br> 
+                                <strong>Hire Date:</strong><br> 
                                 {{ $employee->date_hired ? $employee->date_hired->format('d M Y') : '—' }}
                             </div>
                             <div class="col-md-6">
-                                <strong>Idara:</strong><br> {{ $employee->department->name ?? '—' }}
+                                <strong>Department:</strong><br> {{ $employee->department->name ?? '—' }}
                             </div>
                             <div class="col-md-6">
-                                <strong>Cheo:</strong><br> {{ $employee->position->name ?? '—' }}
+                                <strong>Position:</strong><br> {{ $employee->position->name ?? '—' }}
                             </div>
                             <div class="col-md-6">
-                                <strong>Mshahara Msingi:</strong><br> 
+                                <strong>Basic Salary:</strong><br> 
                                 <strong>TZS {{ number_format($employee->basic_salary ?? 0, 0) }}</strong>
                             </div>
                         </div>

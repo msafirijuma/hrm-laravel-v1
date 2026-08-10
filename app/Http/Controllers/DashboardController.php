@@ -10,6 +10,7 @@ use App\Models\Employee;
 use App\Models\Department;
 use App\Models\LeaveRequest;
 use App\Models\Payroll;
+use App\Models\ActivityLog;
 use Carbon\Carbon;
 
 class DashboardController extends Controller
@@ -18,38 +19,113 @@ class DashboardController extends Controller
     {
         /** @var \App\Models\User $user */
         $user = Auth::user();
-        $user->load('roles');
-        
-        if ($user->hasAnyRole(['Super Admin', 'HR'])) {
-            // HR / Super Admin Dashboard Stats
-            $totalEmployees = Employee::count();
-            $totalDepartments = Department::count();
-            $pendingLeaves = LeaveRequest::where('status', 'pending')->count();
-            
-            $thisMonth = Carbon::now()->format('Y-m');
-            $thisMonthPayroll = Payroll::where('month', $thisMonth)->sum('net_salary');
-            $totalPayrollThisMonth = Payroll::where('month', $thisMonth)->count();
 
-            $recentPayrolls = Payroll::with('employee')
-                                ->latest()
-                                ->take(5)
-                                ->get();
+        // ==================== SUPER ADMIN ====================
+        if ($user->hasRole('Super Admin')) {
+            $totalEmployees     = Employee::count();
+            $totalDepartments   = Department::count();
+            $pendingLeaves      = LeaveRequest::where('status', 'pending')->count();
+            $thisMonth          = now()->format('Y-m');
+            $thisMonthPayroll   = Payroll::where('month', $thisMonth)->sum('net_salary');
+            $activeEmployees    = Employee::where('status', 'active')->count();
+            $inactiveEmployees  = Employee::where('status', '!=', 'active')->count();
+            $recentActivities   = ActivityLog::with('user')->latest()->take(8)->get();
 
-            return view('dashboard.hr', compact(
-                'totalEmployees', 
-                'totalDepartments', 
+            return view('dashboard.admin', compact(
+                'totalEmployees',
+                'totalDepartments',
                 'pendingLeaves',
                 'thisMonthPayroll',
-                'totalPayrollThisMonth',
-                'recentPayrolls'
+                'activeEmployees',
+                'inactiveEmployees',
+                'recentActivities'
             ));
-        } 
-        elseif ($user->hasRole('Manager')) {
-            return view('dashboard.manager');
-        } 
-        else {
-            return view('dashboard.employee');
         }
+
+        // ==================== HR ====================
+        if ($user->hasRole('HR')) {
+            $totalEmployees     = Employee::count();
+            $totalDepartments   = Department::count();
+            $pendingLeaves      = LeaveRequest::where('status', 'pending')->count();
+            $thisMonth          = now()->format('Y-m');
+            $thisMonthPayroll   = Payroll::where('month', $thisMonth)->sum('net_salary');
+            $totalPayrollCount  = Payroll::where('month', $thisMonth)->count();
+            $recentHires        = Employee::latest()->take(5)->get();
+            $pendingLeaveList   = LeaveRequest::with('employee.department', 'leaveType')
+                ->where('status', 'pending')
+                ->latest()->take(5)->get();
+
+            return view('dashboard.hr', compact(
+                'totalEmployees',
+                'totalDepartments',
+                'pendingLeaves',
+                'thisMonthPayroll',
+                'totalPayrollCount',
+                'recentHires',
+                'pendingLeaveList'
+            ));
+        }
+
+        // ==================== MANAGER ====================
+        if ($user->hasRole('Manager')) {
+            $employee = $user->employee;
+            $teamMembers = collect();
+            $pendingTeamLeaves = 0;
+            $onLeaveNow = 0;
+
+            if ($employee) {
+                $teamMembers = Employee::where('department_id', $employee->department_id)
+                    ->where('id', '!=', $employee->id)
+                    ->with('position')
+                    ->get();
+
+                $pendingTeamLeaves = LeaveRequest::whereIn('employee_id', $teamMembers->pluck('id'))
+                    ->where('status', 'pending')
+                    ->count();
+
+                $onLeaveNow = LeaveRequest::whereIn('employee_id', $teamMembers->pluck('id'))
+                    ->where('status', 'approved')
+                    ->whereDate('start_date', '<=', now())
+                    ->whereDate('end_date', '>=', now())
+                    ->count();
+            }
+
+            return view('dashboard.manager', compact(
+                'teamMembers',
+                'pendingTeamLeaves',
+                'onLeaveNow'
+            ));
+        }
+
+        // ==================== EMPLOYEE ====================
+        $employee = $user->employee;
+        $myLeaves = collect();
+        $leaveBalance = 0;
+        $currentLeave = null;
+        $latestPayslip = null;
+
+        if ($employee) {
+            $myLeaves = LeaveRequest::where('employee_id', $employee->id)
+                ->latest()->take(5)->get();
+
+            $leaveBalance = 21; // Unaweza kuhesabu kutoka leave types baadaye
+            $currentLeave = LeaveRequest::where('employee_id', $employee->id)
+                ->where('status', 'approved')
+                ->whereDate('start_date', '<=', now())
+                ->whereDate('end_date', '>=', now())
+                ->first();
+
+            $latestPayslip = Payroll::where('employee_id', $employee->id)
+                ->latest('month')->first();
+        }
+
+        return view('dashboard.employee', compact(
+            'employee',
+            'myLeaves',
+            'leaveBalance',
+            'currentLeave',
+            'latestPayslip'
+        ));
     }
 
     public function myProfile()
@@ -58,8 +134,10 @@ class DashboardController extends Controller
         $user = Auth::user();
         $employee = $user->employee()->with(['department', 'position'])->first();
 
-        if ($user->hasAnyRole(['Super Admin', 'HR'])) {
-            return view('profiles.hr', compact('employee'));
+        if ($user->hasAnyRole('Super Admin')) {
+            return view('profiles.admin', compact('employee'));
+        } elseif ($user->hasRole('HR')) {
+            return view('profiles.manager', compact('employee'));
         } elseif ($user->hasRole('Manager')) {
             return view('profiles.manager', compact('employee'));
         } else {
@@ -95,7 +173,7 @@ class DashboardController extends Controller
         $employee->update($data);
 
         return redirect()->route('my-profile')
-                        ->with('success', 'Profile imehaririwa!');
+            ->with('success', 'Profile imehaririwa!');
     }
 
     public function changePassword()
@@ -114,17 +192,16 @@ class DashboardController extends Controller
 
         // Check current password
         if (!Hash::check($request->current_password, $user->password)) {
-            return back()->withErrors(['current_password' => 'Nenosiri la sasa si sahihi.']);
+            return back()->withErrors(['current_password' => 'Current password is incorrect.']);
         }
 
         // Update password
-         /** @var \App\Models\User $user */
+        /** @var \App\Models\User $user */
         $user->update([
             'password' => Hash::make($request->new_password),
         ]);
 
         return redirect()->route('my-profile')
-                        ->with('success', 'Nenosiri limebadilishwa kwa mafanikio!');
+            ->with('success', 'Password updated successfully!');
     }
-    
 }

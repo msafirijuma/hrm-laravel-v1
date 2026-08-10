@@ -6,25 +6,21 @@
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h2>Performance Reviews</h2>
         <a href="{{ route('performance-reviews.create') }}" class="btn btn-primary">
-            <i class="fas fa-plus"></i> Ongeza Review Mpya
+            <i class="fas fa-plus"></i> Add New Review
         </a>
     </div>
 
-    @if(session('success'))
-        <div class="alert alert-success">{{ session('success') }}</div>
-    @endif
-
     <div class="card">
         <div class="card-body">
-            <table class="table table-hover">
+            <table class="table table-striped table-hover" id="performanceTable">
                 <thead class="table-dark">
                     <tr>
-                        <th>Mfanyakazi</th>
-                        <th>Idara</th>
+                        <th>Employee</th>
+                        <th>Department</th>
                         <th>Period</th>
                         <th>Rating</th>
                         <th>Reviewed By</th>
-                        <th>Tarehe</th>
+                        <th>Date</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -43,14 +39,11 @@
                         <td>{{ $review->created_at->format('d M Y') }}</td>
                         <td>
                             <a href="{{ route('performance-reviews.show', $review) }}" class="btn btn-sm btn-info">
-                                <i class="fas fa-eye"></i> Angalia
+                                <i class="fas fa-eye"></i> View
                             </a>
                         </td>
                     </tr>
                     @empty
-                    <tr>
-                        <td colspan="7" class="text-center py-5">Hakuna Performance Review bado.</td>
-                    </tr>
                     @endforelse
                 </tbody>
             </table>

@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Profile ya ' . $employee->first_name)
+@section('title', 'Profile - ' . $employee->first_name)
 
 @section('content')
 <div class="container">
@@ -31,20 +31,20 @@
         <div class="col-lg-8">
             <div class="card shadow-sm">
                 <div class="card-header bg-primary text-white">
-                    <h5 class="mb-0">Maelezo ya Mfanyakazi</h5>
+                    <h5 class="mb-0">Employee Details</h5>
                 </div>
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-6 mb-3">
-                            <strong>Idara:</strong><br>
+                            <strong>Department:</strong><br>
                             {{ $employee->department->name ?? '—' }}
                         </div>
                         <div class="col-md-6 mb-3">
-                            <strong>Cheo:</strong><br>
+                            <strong>Position:</strong><br>
                             {{ $employee->position->name ?? '—' }}
                         </div>
                         <div class="col-md-6 mb-3">
-                            <strong>Simu:</strong><br>
+                            <strong>Phone:</strong><br>
                             {{ $employee->phone }}
                         </div>
                         <div class="col-md-6 mb-3">
@@ -52,19 +52,19 @@
                             {{ $employee->email }}
                         </div>
                         <div class="col-md-6 mb-3">
-                            <strong>Tarehe ya Kuzaliwa:</strong><br>
+                            <strong>Date of Birth:</strong><br>
                             {{ $employee->date_of_birth ? $employee->date_of_birth->format('d M Y') : '—' }}
                         </div>
                         <div class="col-md-6 mb-3">
-                            <strong>Tarehe ya Kuajiriwa:</strong><br>
+                            <strong>Hire Date:</strong><br>
                             {{ $employee->date_hired ? $employee->date_hired->format('d M Y') : '—' }}
                         </div>
                         <div class="col-md-6 mb-3">
-                            <strong>Jinsia:</strong><br>
+                            <strong>Gender:</strong><br>
                             {{ $employee->gender }}
                         </div>
                         <div class="col-md-6 mb-3">
-                            <strong>Mshahara wa Msingi:</strong><br>
+                            <strong>Basic Salary:</strong><br>
                             <strong>TZS {{ number_format($employee->basic_salary, 0) }}</strong>
                         </div>
                     </div>
@@ -74,8 +74,8 @@
     </div>
 
     <div class="mt-4">
-        <a href="{{ route('employees.index') }}" class="btn btn-secondary">Rudi kwenye Orodha</a>
-        <a href="{{ route('employees.edit', $employee) }}" class="btn btn-warning">Hariri Taarifa</a>
+        <a href="{{ route('employees.index') }}" class="btn btn-secondary">Back to Employees</a>
+        <a href="{{ route('employees.edit', $employee) }}" class="btn btn-warning">Edit Info</a>
     </div>
 </div>
 @endsection

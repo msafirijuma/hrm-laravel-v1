@@ -24,7 +24,7 @@
     <p><strong>Emp. Number:</strong> {{ $payroll->employee->employee_number }}</p>
     <p><strong>Department:</strong> {{ $payroll->employee->department->name ?? '-' }}</p>
 
-    <table>
+    <table class="table table-bordered table-hover table-striped">
         <tr>
             <th>Notes</th>
             <th class="right">Amount (TZS)</th>

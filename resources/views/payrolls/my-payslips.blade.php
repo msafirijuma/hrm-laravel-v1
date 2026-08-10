@@ -8,7 +8,7 @@
 
         <div class="card">
             <div class="card-body">
-                <table class="table table-hover">
+                <table class="table table-bordered table-striped table-hover" id="payrollTable">
                     <thead class="table-dark">
                         <tr>
                             <th>Month</th>
@@ -32,9 +32,9 @@
                             </td>
                         </tr>
                         @empty
-                        <tr>
+                        {{-- <tr>
                             <td colspan="5" class="text-center py-4">You haven't received any payroll yet.</td>
-                        </tr>
+                        </tr> --}}
                         @endforelse
                     </tbody>
                 </table>

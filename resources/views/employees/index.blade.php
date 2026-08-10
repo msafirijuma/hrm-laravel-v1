@@ -1,25 +1,18 @@
 @extends('layouts.app')
 
-@section('title', 'Wafanyakazi')
+@section('title', 'Employees')
 
 @section('content')
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2>Employees</h2>
+        <h2 class="fw-bold">Employees</h2>
         <a href="{{ route('employees.create') }}" class="btn btn-primary" onclick="showPageLoader('Tunapakia fomu ya kuongeza mfanyakazi...')">
             <i class="fas fa-plus"></i> Add New Employee
         </a>
     </div>
 
-    @if(session('success'))
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            {{ session('success') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-    @endif
-
     <div class="card">
         <div class="card-body">
-            <table id="employeeTable" class="table table-bordered table-hover">
+            <table id="employeeTable" class="table table-bordered table-striped table-hover">
                 <thead class="table-dark">
                     <tr>
                         <th>#</th>
@@ -70,7 +63,7 @@
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="8" class="text-center py-4 text-muted">Hakuna data ya wafanyakazi kwa sasa.</td>
+                        <td colspan="8" class="text-center py-4 text-muted">No any employee info yet.</td>
                     </tr>
                     @endforelse
                 </tbody>
@@ -80,7 +73,6 @@
 @endsection
 
 @section('scripts')
-<script src="https://jsdelivr.net"></script>
 <script>
     // Loader function during page navigation
     function showPageLoader(message) {
@@ -96,13 +88,13 @@
 
     // SweetAlert during view action
     function triggerView(url) {
-        showPageLoader('Tunafungua wasifu wa mfanyakazi...');
+        showPageLoader('We are loading employee details...');
         window.location.href = url;
     }
 
     // SweetAlert during edit action
     function triggerEdit(url) {
-        showPageLoader('Tunatayarisha fomu ya marekebisho...');
+        showPageLoader('We are preparing edit form...');
         window.location.href = url;
     }
 

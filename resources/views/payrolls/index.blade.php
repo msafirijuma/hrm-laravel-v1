@@ -15,13 +15,9 @@
         </div>
     </div>
 
-    @if(session('success'))
-        <div class="alert alert-success">{{ session('success') }}</div>
-    @endif
-
     <div class="card shadow-sm">
         <div class="card-body">
-            <table class="table table-bordered table-hover">
+            <table class="table table-bordered table-hover" id="payrollTable">
                 <thead class="table-dark">
                     <tr>
                         <th>Month</th>
@@ -59,13 +55,13 @@
                                 <form action="{{ route('payrolls.mark-paid', $payroll) }}" method="POST" style="display:inline;">
                                     @csrf
                                     <button type="submit" class="btn btn-sm btn-success"
-                                            onclick="return confirm('Una uhakika umelipa mshahara huu?')">
+                                            onclick="return confirm('Are you sure you paid this payrol?')">
                                         <i class="fas fa-check-circle"></i> Paid
                                     </button>
                                 </form>
                             @endif
 
-                            <!-- Delete with strong confirmation -->
+                            <!-- Delete -->
                             <form action="{{ route('payrolls.destroy', $payroll) }}" method="POST" style="display:inline;">
                                 @csrf
                                 @method('DELETE')
@@ -77,9 +73,9 @@
                         </td>
                     </tr>
                     @empty
-                    <tr>
+                    {{-- <tr>
                         <td colspan="8" class="text-center py-5">No payroll has been created yet</td>
-                    </tr>
+                    </tr> --}}
                     @endforelse
                 </tbody>
             </table>

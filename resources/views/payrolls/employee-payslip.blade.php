@@ -1,8 +1,6 @@
 @extends('layouts.app')
 
-{{-- @section('title', 'Payslip - {{ $payroll->month }}') --}}
 @section('title', 'PAYSLIP - ' . $payroll->month . (date($payroll->year) ? ' ' . $payroll->year : ''))
-
 
 @section('content')
     <div class="container py-4">
@@ -64,7 +62,7 @@
                                     <td class="text-end">{{ number_format($payroll->basic_salary, 0) }}</td>
                                 </tr>
                                 <tr>
-                                    <td>Allowances / Posho</td>
+                                    <td>Allowances</td>
                                     <td class="text-end">{{ number_format($payroll->allowances, 0) }}</td>
                                 </tr>
                                 <tr class="table-success fw-bold">
@@ -131,50 +129,50 @@
 
 <style>
 
-        @media screen {
-            .payslip-card {
-                margin-top: 20px;
-                border-radius: 8px;
-            }
+    @media screen {
+        .payslip-card {
+            margin-top: 20px;
+            border-radius: 8px;
         }
+    }
 
-        @media print {
-            body * {
-                visibility: hidden !important;
+    @media print {
+        body * {
+            visibility: hidden !important;
+        }
+        @page {
+            size: auto;   
+            margin: 10mm 15mm 10mm 15mm; 
             }
-            @page {
-                size: auto;   
-                margin: 10mm 15mm 10mm 15mm; 
-             }
+
+        body {
+            margin: 0px; 
+        }
     
-            body {
-                margin: 0px; 
-            }
-        
-            .payslip-card, .payslip-card * {
-                visibility: visible !important;
-            }
-            
-            .payslip-card {
-                position: absolute !important;
-                left: 0 !important;
-                top: 0 !important;
-                width: 100% !important;
-                max-width: 100% !important;
-                border: 1px solid #000 !important;
-                box-shadow: none !important;
-                margin: 0 !important;
-                padding: 10px !important;
-            }
-
-            @page {
-                size: A4;
-                margin: 15mm !important;
-            }
-            
-            .table {
-                width: 100% !important;
-            }
+        .payslip-card, .payslip-card * {
+            visibility: visible !important;
         }
-    </style>
+        
+        .payslip-card {
+            position: absolute !important;
+            left: 0 !important;
+            top: 0 !important;
+            width: 100% !important;
+            max-width: 100% !important;
+            border: 1px solid #000 !important;
+            box-shadow: none !important;
+            margin: 0 !important;
+            padding: 10px !important;
+        }
+
+        @page {
+            size: A4;
+            margin: 15mm !important;
+        }
+        
+        .table {
+            width: 100% !important;
+        }
+    }
+</style>
 @endsection

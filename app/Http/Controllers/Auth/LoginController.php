@@ -32,10 +32,10 @@ class LoginController extends Controller
             // Redirect based on user role
             if ($user->hasRole('Super Admin') || $user->hasRole('HR')) {
                 return redirect()->route('dashboard')->with('success', 'Welcome back!');
-            } elseif ($user->hasRole('Manager')) {
+            } elseif ($user->hasRole('Manager') || $user->hasRole('Employee')) {
                 return redirect()->route('dashboard')->with('success', 'Welcome back!');
             } else {
-                return redirect()->route('dashboard')->with('success', 'Welcome back!'); // Employee
+                return redirect()->route('login')->with('error', 'Permission is denied'); // Non staff
             }
         }
 

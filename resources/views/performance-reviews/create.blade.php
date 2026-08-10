@@ -1,9 +1,9 @@
 @extends('layouts.app')
 
-@section('title', 'Ongeza Performance Review')
+@section('title', 'Add New Performance Review')
 
 @section('content')
-    <h2 class="mb-4">Ongeza Performance Review Mpya</h2>
+    <h2 class="mb-4">Add New Performance Review</h2>
 
     <div class="card">
         <div class="card-body">
@@ -11,9 +11,9 @@
                 @csrf
 
                 <div class="mb-3">
-                    <label>Mfanyakazi</label>
+                    <label>Employee</label>
                     <select name="employee_id" class="form-control" required>
-                        <option value="">-- Chagua Mfanyakazi --</option>
+                        <option value="">-- Choose Employee --</option>
                         @foreach($employees as $emp)
                             <option value="{{ $emp->id }}">
                                 {{ $emp->employee_number }} - {{ $emp->first_name }} {{ $emp->last_name }}
@@ -30,7 +30,7 @@
                 <div class="mb-3">
                     <label>Rating (1 - 5)</label>
                     <select name="rating" class="form-control" required>
-                        <option value="">-- Chagua Rating --</option>
+                        <option value="">-- Choose Rating --</option>
                         @for($i = 5; $i >= 1; $i--)
                             <option value="{{ $i }}">{{ $i }} - {{ $i == 5 ? 'Excellent' : ($i == 4 ? 'Good' : ($i == 3 ? 'Average' : ($i == 2 ? 'Below Average' : 'Poor'))) }}</option>
                         @endfor
@@ -38,7 +38,7 @@
                 </div>
 
                 <div class="mb-3">
-                    <label>Strengths (Mambo mazuri)</label>
+                    <label>Strengths (Good tiding)</label>
                     <textarea name="strengths" class="form-control" rows="4" required></textarea>
                 </div>
 

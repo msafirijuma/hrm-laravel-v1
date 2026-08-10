@@ -8,7 +8,7 @@
 
         <div class="card shadow-sm">
             <div class="card-body">
-                <form action="{{ route('payrolls.bulk.preview') }}" method="POST">
+                <form action="{{ route('payrolls.bulk.preview') }}" method="POST" enctype="multipart/form-data">
                     @csrf
 
                     <div class="row">

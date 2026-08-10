@@ -1,13 +1,13 @@
 @extends('layouts.app')
 
-@section('title', 'Maombi Yanayosubiri')
+@section('title', 'Pending Leave Requests')
 
 @section('content')
-    <h2 class="mb-4">Maombi ya Likizo Yanayosubiri Approval</h2>
+    <h2 class="mb-4">Leave Requests Waiting Approval</h2>
 
     <div class="card">
         <div class="card-body">
-            <table class="table table-bordered table-hover">
+            <table class="table table-bordered table-hover" id="leaveTable">
                 <thead class="table-dark">
                     <tr>
                         <th>Employee</th>
@@ -20,7 +20,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- TUMEBADILISHA FOREACH KUWA FORELSE ILI KUWEKA ELSE STATEMENT -->
+                
                     @forelse($pendingLeaves as $leave)
                     <tr>
                         <td>{{ $leave->employee->first_name }} {{ $leave->employee->last_name }}</td>
@@ -30,12 +30,12 @@
                         <td><strong>{{ abs($leave->days_requested) }}</strong></td>
                         <td>{{ Str::limit($leave->reason, 60) }}</td>
                         <td>
-                            <!-- 1. FORM YA APPROVE (Imejificha) -->
+                            <!-- Approve Form -->
                             <form id="approve-form-{{ $leave->id }}" action="{{ route('leave-requests.approve', $leave) }}" method="POST" style="display:none;">
                                 @csrf
                             </form>
 
-                            <!-- 2. FORM YA REJECT (Imejificha - inaruhusu kubeba sababu ya kukataa) -->
+                            <!-- Reject Form -->
                             <form id="reject-form-{{ $leave->id }}" action="{{ url('leave-requests/'.$leave->id.'/reject') }}" method="POST" style="display:none;">
                                 @csrf
                                 <input type="hidden" name="rejection_reason" id="rejection-reason-input-{{ $leave->id }}">
@@ -51,13 +51,12 @@
                         </td>
                     </tr>
                     @empty
-                    <!-- HII NDIO ELSE STATEMENT KAMA HAKUNA PENDING REQUESTS -->
-                    <tr>
+                    {{-- <tr>
                         <td colspan="7" class="text-center py-4 text-muted">
                             <i class="fas fa-inbox fa-2x mb-2 d-block text-secondary"></i>
-                            Hakuna maombi ya likizo yanayosubiri kwa sasa.
+                            No any pending request yet.
                         </td>
-                    </tr>
+                    </tr> --}}
                     @endforelse
                 </tbody>
             </table>
@@ -65,25 +64,24 @@
     </div>
 
 {{-- SweetAlert2 Script --}}
-<script src="https://jsdelivr.net"></script>
 <script>
     function confirmApprove(id) {
         console.log('Approving leave request with ID:', id);
         Swal.fire({
-            title: 'Una uhakika?',
-            text: "Utakuwa unakubali ombi la likizo",
+            title: 'Are you sure?',
+            text: "You will be accepting this leave request.",
             icon: 'question',
             showCancelButton: true,
             confirmButtonColor: '#28a745',
             cancelButtonColor: '#d33',
-            confirmButtonText: 'Ndiyo, Kubali!',
-            cancelButtonText: 'Ghairi',
+            confirmButtonText: 'Yes, Accept!',
+            cancelButtonText: 'Cancel',
             allowOutsideClick: false
         }).then((result) => {
             if (result.isConfirmed) {
                 Swal.fire({
-                    title: 'Tunashughulikia...',
-                    text: 'Tafadhali subiri kidogo wakati ombi linakubaliwa',
+                    title: 'Processing...',
+                    text: 'Please wait while a request is being accepted.',
                     allowOutsideClick: false,
                     didOpen: () => {
                         Swal.showLoading();
@@ -97,25 +95,25 @@
     function rejectLeave(id) {
         console.log('Rejecting leave request with ID:', id);
         Swal.fire({
-            title: 'Kataa Ombi la Likizo',
+            title: 'Reject leave request',
             input: 'textarea',
-            inputLabel: 'Sababu ya Kukataa',
-            inputPlaceholder: 'Andika sababu hapa...',
+            inputLabel: 'Reason for rejection',
+            inputPlaceholder: 'Write a reason here...',
             showCancelButton: true,
-            confirmButtonText: 'Kataa Ombi',
+            confirmButtonText: 'Reject Leave Request',
             confirmButtonColor: '#dc3545',
-            cancelButtonText: 'Ghairi',
+            cancelButtonText: 'Cancel',
             allowOutsideClick: false,
             inputValidator: (value) => {
                 if (!value) {
-                    return 'Lazima uandike sababu ya kukataa!';
+                    return 'You must atleast state the reason for rejection!';
                 }
             }
         }).then((result) => {
             if (result.isConfirmed && result.value) {
                 Swal.fire({
-                    title: 'Tunashughulikia...',
-                    text: 'Tafadhali subiri kidogo wakati ombi linakataliwa',
+                    title: 'Processing...',
+                    text: 'Please wait while a request is being cancelled.',
                     allowOutsideClick: false,
                     didOpen: () => {
                         Swal.showLoading();

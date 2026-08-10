@@ -26,13 +26,13 @@
             <div class="col-lg-8">
                 <div class="card shadow-sm">
                     <div class="card-header bg-success text-white">
-                        <h5 class="mb-0">Taarifa za Idara Yangu</h5>
+                        <h5 class="mb-0">My Department Info</h5>
                     </div>
                     <div class="card-body">
-                        <p><strong>Idara:</strong> {{ $employee->department->name ?? '—' }}</p>
-                        <p><strong>Idadi ya Wafanyakazi:</strong> {{ $employee->department->employees_count ?? '0' }}</p>
+                        <p><strong>Department:</strong> {{ $employee->department->name ?? '—' }}</p>
+                        <p><strong>Total Employees:</strong> {{ $employee->department->employees_count ?? '0' }}</p>
                         <hr>
-                        <a href="{{ route('my-team') }}" class="btn btn-success">Angalia Timu Yangu</a>
+                        <a href="{{ route('my-team') }}" class="btn btn-success">View My Team</a>
                     </div>
                 </div>
             </div>

@@ -19,7 +19,7 @@
 
     <div class="card">
         <div class="card-body">
-            <table class="table table-bordered table-hover">
+            <table class="table table-bordered table-hover table-striped" id="leaveTable">
                 <thead class="table-dark">
                     <tr>
                         <th>#</th>
@@ -59,9 +59,9 @@
                         </td>
                     </tr>
                     @empty
-                    <tr>
+                    {{-- <tr>
                         <td colspan="6" class="text-center py-4">No leave type yet.</td>
-                    </tr>
+                    </tr> --}}
                     @endforelse
                 </tbody>
             </table>

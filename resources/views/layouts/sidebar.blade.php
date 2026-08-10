@@ -15,7 +15,6 @@
 
         <!-- HR & Super Admin Only -->
         @if(auth()->user()->hasAnyRole(['Super Admin', 'HR']))
-            <!-- Section Header kwa Admin -->
             <li class="nav-item mt-3 mb-2">
                 <span class="text-uppercase text-muted fw-bold small tracking-wider px-3">Management</span>
             </li>
@@ -42,7 +41,7 @@
                 </a>
             </li>
 
-            <!-- Payroll Dropdown Menu -->
+            <!-- Payrolls -->
             <li class="nav-item dropdown mb-1">
                 <a class="nav-link d-flex align-items-center justify-content-between text-white dropdown-toggle" href="#" id="payrollDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                     <div class="d-flex align-items-center">
@@ -83,7 +82,7 @@
                 </a>
             </li>
 
-            <!-- Activity Logs Menu (LINK MPYA) -->
+            <!-- Activity Logs -->
             <li class="nav-item mb-1">
                 <a href="{{ route('activity-logs.index') }}" class="nav-link d-flex align-items-center @if (Str::contains(Route::currentRouteName(), 'activity-logs')) active @endif">
                     <i class="fas fa-history me-3"></i> Activity Logs
@@ -96,11 +95,11 @@
             <li class="nav-item mt-3 mb-2">
                 <span class="text-uppercase text-muted fw-bold small tracking-wider px-3">Manager</span>
             </li>
-            <li class="nav-item mb-1">
+            {{-- <li class="nav-item mb-1">
                 <a href="{{ route('my-team') }}" class="nav-link d-flex align-items-center @if (Route::currentRouteName() == 'my-team') active @endif">
                     <i class="fas fa-users-cog me-3"></i> My Team
                 </a>
-            </li>
+            </li> --}}
         @endif
 
         <!-- Employee & Manager -->
@@ -129,8 +128,6 @@
                 <i class="fas fa-file-invoice me-3"></i> My Payslips
             </a>
         </li>
-
-        <!-- My Profile -->
         <li class="nav-item mb-1">
             <a href="{{ route('my-profile') }}" class="nav-link d-flex align-items-center @if (Route::currentRouteName() == 'my-profile') active @endif">
                 <i class="fas fa-user-circle me-3"></i> My Profile

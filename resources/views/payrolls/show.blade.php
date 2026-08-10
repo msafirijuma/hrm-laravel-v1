@@ -22,7 +22,7 @@
                             </div>
                         </div>
 
-                        <table class="table table-bordered">
+                        <table class="table table-bordered table-striped table-hover">
                             <tr>
                                 <th>Basic Salary</th>
                                 <td class="text-end">TZS {{ number_format($payroll->basic_salary, 0) }}</td>

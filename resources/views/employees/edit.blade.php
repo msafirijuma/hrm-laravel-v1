@@ -1,10 +1,10 @@
 @extends('layouts.app')
 
-@section('title', 'Hariri Mfanyakazi')
+@section('title', 'Edit Employee')
 
 @section('content')
     <div class="container">
-        <h2 class="mb-4">Hariri Taarifa za Mfanyakazi</h2>
+        <h2 class="mb-4">Edit Employee's Details</h2>
 
         <div class="card shadow-sm">
             <div class="card-body">
@@ -15,14 +15,14 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <label>Jina la Kwanza <span class="text-danger">*</span></label>
+                                <label>First Name <span class="text-danger">*</span></label>
                                 <input type="text" name="first_name" class="form-control" 
                                        value="{{ old('first_name', $employee->first_name) }}" required>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <label>Jina la Mwisho <span class="text-danger">*</span></label>
+                                <label>Last Name <span class="text-danger">*</span></label>
                                 <input type="text" name="last_name" class="form-control" 
                                        value="{{ old('last_name', $employee->last_name) }}" required>
                             </div>
@@ -39,7 +39,7 @@
                         </div>
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <label>Simu <span class="text-danger">*</span></label>
+                                <label>Phone <span class="text-danger">*</span></label>
                                 <input type="text" name="phone" class="form-control" 
                                        value="{{ old('phone', $employee->phone) }}" required>
                             </div>
@@ -49,14 +49,14 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <label>Tarehe ya Kuzaliwa <span class="text-muted">(Optional)</span></label>
+                                <label>Date of Birth <span class="text-muted">(Optional)</span></label>
                                 <input type="date" name="date_of_birth" class="form-control" 
                                        value="{{ old('date_of_birth', $employee->date_of_birth?->format('Y-m-d')) }}">
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <label>Tarehe ya Kuajiriwa <span class="text-danger">*</span></label>
+                                <label>Hired Date <span class="text-danger">*</span></label>
                                 <input type="date" name="date_hired" class="form-control" 
                                        value="{{ old('date_hired', $employee->date_hired?->format('Y-m-d')) }}" required>
                             </div>
@@ -66,9 +66,9 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <label>Idara <span class="text-danger">*</span></label>
+                                <label>Department <span class="text-danger">*</span></label>
                                 <select name="department_id" class="form-control" required>
-                                    <option value="">-- Chagua Idara --</option>
+                                    <option value="">-- Choose Department --</option>
                                     @foreach($departments as $dept)
                                         <option value="{{ $dept->id }}" {{ $dept->id == $employee->department_id ? 'selected' : '' }}>
                                             {{ $dept->name }} ({{ $dept->code }})
@@ -81,7 +81,7 @@
                             <div class="mb-3">
                                 <label>Cheo <span class="text-danger">*</span></label>
                                 <select name="position_id" class="form-control" required>
-                                    <option value="">-- Chagua Cheo --</option>
+                                    <option value="">-- Choose Department  --</option>
                                     @foreach($positions as $pos)
                                         <option value="{{ $pos->id }}" {{ $pos->id == $employee->position_id ? 'selected' : '' }}>
                                             {{ $pos->name }}
@@ -95,7 +95,7 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <label>Jinsia <span class="text-danger">*</span></label>
+                                <label>Gender <span class="text-danger">*</span></label>
                                 <select name="gender" class="form-control" required>
                                     <option value="Male" {{ $employee->gender == 'Male' ? 'selected' : '' }}>Male</option>
                                     <option value="Female" {{ $employee->gender == 'Female' ? 'selected' : '' }}>Female</option>
@@ -104,7 +104,7 @@
                         </div>
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <label>Mshahara wa Msingi (TZS)</label>
+                                <label>Basic Salary (TZS)</label>
                                 <input type="number" name="basic_salary" class="form-control" step="0.01"
                                        value="{{ old('basic_salary', $employee->basic_salary) }}">
                             </div>
@@ -115,7 +115,7 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <label>Role / Mamlaka <span class="text-danger">*</span></label>
+                                <label>Role <span class="text-danger">*</span></label>
                                 <select name="role" class="form-control" required>
                                     @foreach($roles as $role)
                                         <option value="{{ $role->name }}" 
@@ -130,21 +130,21 @@
 
                     <!-- Photo Upload -->
                     <div class="mb-4">
-                        <label>Picha Mpya (Optional)</label>
+                        <label>New Image (Optional)</label>
                         <input type="file" name="photo" class="form-control" accept="image/*">
                         
                         @if($employee->photo)
                             <div class="mt-3">
                                 <img src="{{ asset('storage/' . $employee->photo) }}" 
                                      class="img-thumbnail" width="150" alt="Current Photo">
-                                <p class="text-muted small mt-1">Picha ya sasa</p>
+                                <p class="text-muted small mt-1">Current Image</p>
                             </div>
                         @endif
                     </div>
 
                     <div class="mt-4">
-                        <button type="submit" class="btn btn-primary btn-lg">Hifadhi Mabadiliko</button>
-                        <a href="{{ route('employees.index') }}" class="btn btn-secondary btn-lg">Rudi</a>
+                        <button type="submit" class="btn btn-primary btn-lg">Save Changes</button>
+                        <a href="{{ route('employees.index') }}" class="btn btn-secondary btn-lg">Cancel</a>
                     </div>
                 </form>
             </div>

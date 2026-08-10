@@ -65,13 +65,12 @@
 <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
 <script src="{{ asset('js/jquery.dataTables.min.js') }}"></script>
 <script src="{{ asset('js/dataTables.bootstrap5.min.js') }}"></script>
-<script src="{{ asset('js/select2.min.js') }}"></script>
 <script src="{{ asset('js/sweetalert2.all.min.js') }}"></script>
 
 <!-- Datatable -->
 <script>
     $(document).ready(function() {
-        $('#employeeTable').DataTable({
+        $('#employeeTable, #departmentTable, #leaveTable, #payrollTable, #performanceTable').DataTable({
             "language": {
                 "search": "Search:",
                 "lengthMenu": "Show _MENU_ entries",
@@ -86,7 +85,6 @@
         });
     });
 </script>
-@yield('scripts')
 
 <!-- SweetAlert2 -->
 <script>
@@ -95,24 +93,44 @@
         position: 'top-end',
         showConfirmButton: false,
         timer: 4000,
-        timerProgressBar: true
+        timerProgressBar: true,
+        didOpen: (toast) => {
+                toast.onmouseenter = Swal.stopTimer;
+                toast.onmouseleave = Swal.resumeTimer;
+        }
     });
 
     // success message
     @if(session('success'))
         Toast.fire({
             icon: 'success',
-            title: "{!! session('success') !!}"
+            title: "{{ session('success') }}"
         });
     @endif
 
     // error message
-    @if(session('error'))
+    @if($errors->any())
         Toast.fire({
             icon: 'error',
-            title: "{!! session('error') !!}"
+            title: "{{ $errors->first() }}" 
         });
-    @endif
+    @endif     
+</script>
+
+<script>
+    window.addEventListener('pageshow', function (event) {
+        // Back button pressed
+        var historyTraversal = event.persisted || 
+                               (typeof window.performance != 'undefined' && 
+                                window.performance.navigation.type === 2);
+                                
+        if (historyTraversal) {
+            // Close any frozen SweetAlert spinner immediately
+            if (typeof Swal !== 'undefined') {
+                Swal.close();
+            }
+        }
+    });
 </script>
 
 @yield('scripts')

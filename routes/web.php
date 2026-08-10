@@ -22,14 +22,14 @@ Route::middleware('auth')->group(function () {
 
     // HR & Super Admin Routes
     Route::middleware('role:Super Admin,HR')->group(function () {
-        
-        // 1. PAYROLL CUSTOM ROUTES (ZIMEPANDISHWA JUU KUZUIA 404 CONFLICT)
+
+        // PAYROLL CUSTOM ROUTES
         Route::get('/payrolls/reports', [PayrollController::class, 'reports'])
-             ->name('payrolls.reports');
+            ->name('payrolls.reports');
         Route::get('/payrolls/reports/monthly/{month?}', [PayrollController::class, 'monthlyReport'])
-             ->name('payrolls.monthly.report');
+            ->name('payrolls.monthly.report');
         Route::get('/payrolls/reports/monthly/{month}/export', [PayrollController::class, 'exportMonthlyExcel'])
-             ->name('payrolls.monthly.export');
+            ->name('payrolls.monthly.export');
 
         // Bulk Payroll Routes
         Route::get('/payrolls/bulk/create', [PayrollController::class, 'bulkCreate'])->name('payrolls.bulk.create');
@@ -41,20 +41,18 @@ Route::middleware('auth')->group(function () {
         Route::put('/payrolls/{payroll}', [PayrollController::class, 'update'])->name('payrolls.update');
         Route::post('/payrolls/{payroll}/mark-paid', [PayrollController::class, 'markAsPaid'])->name('payrolls.mark-paid');
 
-
-        // 2. RESOURCE ROUTES (ZIMEWEKWA CHINI YA CUSTOM ROUTES)
+        // RESOURCE ROUTES
         Route::resource('payrolls', PayrollController::class);
         Route::resource('departments', DepartmentController::class);
         Route::resource('employees', EmployeeController::class);
         Route::resource('leave-types', LeaveTypeController::class);
         Route::resource('performance-reviews', PerformanceReviewController::class)->only(['index', 'show', 'create', 'store']);
         Route::resource('activity-logs', ActivityLogController::class)->only(['index', 'show']);
-        
 
         // HR Approval Request
         Route::get('/leave-requests/pending', [LeaveRequestController::class, 'pending'])->name('leave-requests.pending');
         Route::post('/leave-requests/{leaveRequest}/approve', [LeaveRequestController::class, 'approve'])->name('leave-requests.approve');
-        
+
         // Reject leave request
         Route::post('/leave-requests/{id}/reject', [LeaveRequestController::class, 'reject'])->name('leave-requests.reject');
     });
@@ -70,7 +68,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/my-profile', [DashboardController::class, 'myProfile'])->name('my-profile');
         Route::get('/profile/edit', [DashboardController::class, 'editProfile'])->name('profile.edit');
         Route::put('/profile/update', [DashboardController::class, 'updateProfile'])->name('profile.update');
-        
+
         // Delete and edit leave request
         Route::get('/leave-requests/{leaveRequest}/edit', [LeaveRequestController::class, 'edit'])->name('leave-requests.edit');
         Route::put('/leave-requests/{leaveRequest}', [LeaveRequestController::class, 'update'])->name('leave-requests.update');
@@ -79,7 +77,7 @@ Route::middleware('auth')->group(function () {
         // Employee Payroll
         Route::get('/my-payslips', [PayrollController::class, 'myPayslips'])->name('my-payslips');
         Route::get('/my-payslips/{payroll}', [PayrollController::class, 'showEmployeePayslip'])->name('my-payslip.show');
-        
+
         // Download Payslip
         Route::get('/payrolls/{payroll}/download', [PayrollController::class, 'downloadPayslip'])->name('payrolls.download');
 
