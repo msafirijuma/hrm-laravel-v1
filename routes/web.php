@@ -5,11 +5,15 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\EmployeeDocumentController;
 use App\Http\Controllers\LeaveTypeController;
 use App\Http\Controllers\LeaveRequestController;
 use App\Http\Controllers\PayrollController;
 use App\Http\Controllers\PerformanceReviewController;
 use App\Http\Controllers\ActivityLogController;
+use App\Http\Controllers\AnnouncementController;
+use App\Http\Controllers\PublicHolidayController;
+use App\Http\Controllers\OfficeSettingController;
 
 // ====================== PUBLIC ROUTES ======================
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
@@ -55,6 +59,50 @@ Route::middleware('auth')->group(function () {
 
         // Reject leave request
         Route::post('/leave-requests/{id}/reject', [LeaveRequestController::class, 'reject'])->name('leave-requests.reject');
+
+        Route::get('/reports/leave-usage', [DashboardController::class, 'leaveUsageReport'])
+            ->name('reports.leave-usage');
+
+        // Attendance
+        Route::get('/mark-attendance', [DashboardController::class, 'markAttendanceForm'])->name('attendance.mark');
+        Route::post('/mark-attendance', [DashboardController::class, 'storeAttendance'])->name('attendance.store');
+        Route::get('/hr-attendance', [DashboardController::class, 'hrAttendance'])->name('hr.attendance');
+
+        // Public holidays
+        Route::resource('public-holidays', PublicHolidayController::class);
+        Route::get('/holiday-calendar', [PublicHolidayController::class, 'calendar'])->name('public-holidays.calendar');
+
+        // Documents
+        Route::get('/employees/{employee}/documents', [EmployeeDocumentController::class, 'index'])->name('employees.documents.index');
+        Route::get('/employees/{employee}/documents/create', [EmployeeDocumentController::class, 'create'])->name('employees.documents.create');
+        Route::post('/employees/{employee}/documents', [EmployeeDocumentController::class, 'store'])->name('employees.documents.store');
+        Route::delete('/documents/{document}', [EmployeeDocumentController::class, 'destroy'])->name('documents.destroy');
+
+        // Announcements 
+        Route::resource('announcements', AnnouncementController::class)->except(['show']);
+
+        // Settings
+        Route::get('/settings', [OfficeSettingController::class, 'index'])->name('settings.index');
+        Route::post('/settings/general', [OfficeSettingController::class, 'updateGeneral'])->name('settings.general');
+        Route::post('/settings/notifications', [OfficeSettingController::class, 'updateNotifications'])->name('settings.notifications');
+        Route::post('/settings/security', [OfficeSettingController::class, 'updateSecurity'])->name('settings.security');
+        Route::post('/settings/appearance', [OfficeSettingController::class, 'updateAppearance'])->name('settings.appearance');
+    });
+
+    Route::middleware(['auth', 'role:Super Admin,HR,Manager'])->group(function () {
+        Route::get('/performance-reviews', [PerformanceReviewController::class, 'index'])->name('performance-reviews.index');
+        Route::get('/performance-reviews/create', [PerformanceReviewController::class, 'create'])->name('performance-reviews.create');
+        Route::post('/performance-reviews', [PerformanceReviewController::class, 'store'])->name('performance-reviews.store');
+        Route::get('/performance-reviews/{performanceReview}', [PerformanceReviewController::class, 'show'])->name('performance-reviews.show');
+    });
+
+    // Manager Routes
+    Route::middleware('role:Manager')->group(function () {
+        Route::get('/team-members', [DashboardController::class, 'teamMembers'])->name('team.members');
+        Route::get('/team-leaves', [DashboardController::class, 'teamLeaves'])->name('team.leaves');
+        Route::get('/team-attendance', [DashboardController::class, 'teamAttendance'])->name('team.attendance');
+        Route::get('/mark-attendance', [DashboardController::class, 'markAttendanceForm'])->name('attendance.mark');
+        Route::post('/mark-attendance', [DashboardController::class, 'storeAttendance'])->name('attendance.store');
     });
 
     // All Authenticated Users (Employee, Manager, HR)
@@ -84,6 +132,14 @@ Route::middleware('auth')->group(function () {
         // Change Password
         Route::get('/change-password', [DashboardController::class, 'changePassword'])->name('password.change');
         Route::put('/change-password', [DashboardController::class, 'updatePassword'])->name('password.update');
+
+        // Announcements 
+        Route::get('/announcement-board', [AnnouncementController::class, 'board'])->name('announcements.board');
+
+        // Document
+        Route::get('/documents/{document}/download', [EmployeeDocumentController::class, 'download'])->name('documents.download');
+        Route::get('/my-documents', [EmployeeDocumentController::class, 'myDocuments'])->name('my.documents');
+        Route::get('/documents/{document}/download', [EmployeeDocumentController::class, 'download'])->name('documents.download');
     });
 
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');

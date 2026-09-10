@@ -23,7 +23,7 @@
                         </select>
                     </div>
                     <div class="mb-3">
-                        <label>Mwezi</label>
+                        <label>Month</label>
                         <input type="text" name="month" class="form-control" value="{{ $currentMonth }}" readonly>
                     </div>
 
@@ -39,10 +39,10 @@
 
                     <input type="hidden" name="month" value="{{ $currentMonth }}">
 
-                    <button type="submit" class="btn btn-success btn-lg">
+                    <button type="submit" class="btn btn-success btn-md mb-2 mb-md-0">
                         <i class="fas fa-calculator"></i> Generate Payroll
                     </button>
-                    <a href="{{ route('payrolls.index') }}" class="btn btn-secondary btn-lg">Back</a>
+                    <a href="{{ route('payrolls.index') }}" class="btn btn-secondary btn-md mb-2 mb-md-0">Back</a>
                 </form>
             </div>
         </div>

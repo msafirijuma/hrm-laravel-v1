@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('title', 'Bulk Payroll Generation')
-
+ 
 @section('content')
     <div class="container">
         <h2 class="mb-4">Generate Bulk Payroll</h2>
@@ -29,10 +29,10 @@
                         </div>
                     </div>
 
-                    <button type="submit" class="btn btn-primary btn-lg">
+                    <button type="submit" class="btn btn-primary btn-md mb-2 mb-md-0">
                         <i class="fas fa-search"></i> Preview Payroll
                     </button>
-                    <a href="{{ route('payrolls.index') }}" class="btn btn-secondary btn-lg">Back to Payrolls</a>
+                    <a href="{{ route('payrolls.index') }}" class="btn btn-secondary btn-md mb-2 mb-md-0">Back to Payrolls</a>
                 </form>
             </div>
         </div>

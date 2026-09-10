@@ -1,10 +1,30 @@
-<div class="sidebar p-3 text-white d-flex flex-column h-100">
+<div class="sidebar p-2 text-white d-flex flex-column h-100">
+    <!-- close button -->
+    <div class="d-flex d-md-none justify-content-end px-3 pe-0 pt-0">
+        <button type="button" id="sidebarClose" 
+                class="btn btn-sm"
+                style="background: transparent; border: 1px solid rgba(255,255,255,0.2); color: #fff; border-radius: 8px; width: 36px; height: 36px;">
+            <i class="fas fa-times"></i>
+        </button>
+    </div>
+
     <!-- Brand Title -->
-    <h4 class="mb-4 text-center fw-bold py-2 border-bottom border-secondary">
-        <i class="fas fa-laptop-code me-2 text-info"></i> HRM System
-    </h4>
+    <div class="p-2 text-center border-bottom border-secondary">
+        <h4 class="mb-2 text-center fw-bold py-2 border-secondary">
+            @if(setting('logo'))
+                <img src="{{ asset('storage/' . setting('logo')) }}"
+                    alt="{{ setting('platform_name', 'Dr GMbash') }}"
+                    class="brand-logo">
+                    {{ setting('platform_name', 'HRM System') }}
+            @else
+                <span class="fw-bold" style="color: #f59e0b;">
+                    {{ setting('platform_name', 'Dr GMbash') }}
+                </span>
+            @endif
+        </h4>
+    </div>
     
-    <ul class="nav flex-column mb-4 flex-grow-1">
+    <ul class="nav flex-column mb-4 mt-2 flex-grow-1">
         
         <!-- Dashboard - All users -->
         <li class="nav-item mb-1">
@@ -34,13 +54,6 @@
                 </a>
             </li>
 
-            <!-- Performance Reviews Menu -->
-            <li class="nav-item mb-1">
-                <a href="{{ route('performance-reviews.index') }}" class="nav-link d-flex align-items-center @if (Str::contains(Route::currentRouteName(), 'performance-reviews')) active @endif">
-                    <i class="fas fa-chart-line me-3"></i> Performance
-                </a>
-            </li>
-
             <!-- Payrolls -->
             <li class="nav-item dropdown mb-1">
                 <a class="nav-link d-flex align-items-center justify-content-between text-white dropdown-toggle" href="#" id="payrollDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -67,6 +80,18 @@
                 </ul>
             </li>
 
+            <li class="nav-item mb-1">
+                <a href="{{ route('hr.attendance') }}" class="nav-link d-flex align-items-center @if (Str::contains(Route::currentRouteName(), 'hr.attendance')) active @endif">
+                    <i class="fas fa-clock me-3"></i> Attendance Overview
+                </a>
+            </li>
+
+            <li class="nav-item mb-1">
+                <a href="{{ route('reports.leave-usage') }}" class="nav-link d-flex align-items-center @if (Str::contains(Route::currentRouteName(), 'reports.leave-usage')) active @endif">
+                    <i class="fas fa-chart-pie me-3"></i> Leave Usage Report
+                </a>
+            </li>
+
             <!-- Pending Leaves Count -->
             <li class="nav-item mb-1">
                 <a href="{{ route('leave-requests.pending') }}" class="nav-link d-flex align-items-center justify-content-between @if (Route::currentRouteName() == 'leave-requests.pending') active @endif">
@@ -82,24 +107,57 @@
                 </a>
             </li>
 
-            <!-- Activity Logs -->
+            <!-- Announcements -->
             <li class="nav-item mb-1">
-                <a href="{{ route('activity-logs.index') }}" class="nav-link d-flex align-items-center @if (Str::contains(Route::currentRouteName(), 'activity-logs')) active @endif">
-                    <i class="fas fa-history me-3"></i> Activity Logs
+                <a href="{{ route('announcements.index') }}" class="nav-link d-flex align-items-center @if (Str::contains(Route::currentRouteName(), 'announcements.index')) active @endif">
+                    <i class="fas fa-bullhorn me-3"></i> Announcements
+                </a>
+            </li>
+
+            <!-- Public Holidays -->
+            <li class="nav-item mb-1">
+                <a href="{{ route('public-holidays.index') }}" class="nav-link d-flex align-items-center @if (Str::contains(Route::currentRouteName(), 'public-holidays.index')) active @endif">
+                    <i class="fas fa-calendar-day me-3"></i> Public Holidays
                 </a>
             </li>
         @endif
+
+        <!-- Announcement Board -->
+        <li class="nav-item mb-3">
+            <a href="{{ route('announcements.board') }}" class="nav-link d-flex align-items-center @if (Str::contains(Route::currentRouteName(), 'announcements.board')) active @endif">
+                <i class="fas fa-bullhorn me-3"></i> Announcement Board
+            </a>
+        </li>
 
         <!-- Manager Only -->
         @if(auth()->user()->hasRole('Manager'))
             <li class="nav-item mt-3 mb-2">
                 <span class="text-uppercase text-muted fw-bold small tracking-wider px-3">Manager</span>
             </li>
-            {{-- <li class="nav-item mb-1">
-                <a href="{{ route('my-team') }}" class="nav-link d-flex align-items-center @if (Route::currentRouteName() == 'my-team') active @endif">
-                    <i class="fas fa-users-cog me-3"></i> My Team
+            <li class="nav-item mb-1">
+                <a href="{{ route('team.members') }}" class="nav-link d-flex align-items-center @if (Route::currentRouteName() == 'team.members') active @endif">
+                    <i class="fas fa-users me-3"></i> Team Members
                 </a>
-            </li> --}}
+            </li>
+            <li class="nav-item mb-1">
+                <a href="{{ route('team.leaves') }}" class="nav-link d-flex align-items-center @if (Route::currentRouteName() == 'team.leaves') active @endif">
+                    <i class="fas fa-calendar me-3"></i> Team Leaves
+                </a>
+            </li>
+            <li class="nav-item mb-1">
+                <a href="{{ route('team.attendance') }}" class="nav-link d-flex align-items-center @if (Route::currentRouteName() == 'team.attendance') active @endif">
+                    <i class="fas fa-clock me-3"></i> Team Attendance
+                </a>
+            </li>
+        @endif
+
+        @if (auth()->user()->hasRole(['Manager', 'HR', 'Super Admin']))
+            <li class="nav-item mb-1">
+                <a href="{{ route('performance-reviews.index') }}" class="nav-link d-flex align-items-center @if (Str::contains(Route::currentRouteName(), 'performance-reviews')) active @endif">
+                    <i class="fas fa-chart-line me-3"></i> Performance Reviews
+                </a>
+            </li>
+            
         @endif
 
         <!-- Employee & Manager -->
@@ -117,6 +175,29 @@
                     <i class="fas fa-paper-plane me-3"></i> Apply for Leave
                 </a>
             </li>
+            <li class="nav-item mb-1">
+                <a href="{{ route('my.documents') }}" class="nav-link d-flex align-items-center @if (Route::currentRouteName() == 'my.documents') active @endif">
+                    <i class="fas fa-folder me-3"></i> My Documents
+                </a>
+            </li>
+        @endif
+
+        <!-- Admin Only -->
+        @if(auth()->user()->hasRole('Super Admin'))
+            <li class="nav-item mt-3 mb-2">
+                <span class="text-uppercase text-muted fw-bold small tracking-wider px-3">System</span>
+            </li>
+            <li class="nav-item mb-1">
+                <a href="{{ route('settings.index') }}" class="nav-link d-flex align-items-center @if (Route::currentRouteName() == 'settings.index') active @endif">
+                    <i class="fas fa-cog me-3"></i> Settings
+                </a>
+            </li>
+            <!-- Activity Logs -->
+            <li class="nav-item mb-1">
+                <a href="{{ route('activity-logs.index') }}" class="nav-link d-flex align-items-center @if (Str::contains(Route::currentRouteName(), 'activity-logs')) active @endif">
+                    <i class="fas fa-history me-3"></i> Activity Logs
+                </a>
+            </li>
         @endif
 
         <!-- Personal Section -->
@@ -124,7 +205,7 @@
             <span class="text-uppercase text-muted fw-bold small tracking-wider px-3">Personal</span>
         </li>
         <li class="nav-item mb-1">
-            <a href="{{ route('my-payslips') }}" class="nav-link d-flex align-items-center @if (Route::currentRouteName() == 'my-payslips') active @endif">
+            <a href="{{ route('my-payslips') }}" class="nav-link d-flex align-items-center @if (Route::currentRouteName() == '') active @endif">
                 <i class="fas fa-file-invoice me-3"></i> My Payslips
             </a>
         </li>

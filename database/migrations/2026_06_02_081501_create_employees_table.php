@@ -28,7 +28,7 @@ return new class extends Migration
             $table->string('photo')->nullable();
             $table->decimal('basic_salary', 15, 2)->default(0);
             $table->enum('status', ['active', 'inactive', 'on_leave', 'terminated'])->default('active');
-
+            $table->date('contract_end_date')->nullable();
             $table->timestamps();
         });
     }

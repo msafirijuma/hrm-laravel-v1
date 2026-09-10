@@ -29,7 +29,7 @@ class DepartmentController extends Controller
         Department::create($request->all());
 
         return redirect()->route('departments.index')
-                         ->with('success', 'Idara imeongezwa kwa mafanikio!');
+            ->with('success', 'Department created successfully!');
     }
 
     public function edit(Department $department)
@@ -48,13 +48,13 @@ class DepartmentController extends Controller
         $department->update($request->all());
 
         return redirect()->route('departments.index')
-                         ->with('success', 'Idara imehaririwa!');
+            ->with('success', 'Department updated successfully!');
     }
 
     public function destroy(Department $department)
     {
         $department->delete();
         return redirect()->route('departments.index')
-                         ->with('success', 'Idara imefutwa!');
+            ->with('success', 'Department deleted successfully!');
     }
 }

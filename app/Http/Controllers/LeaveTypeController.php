@@ -34,7 +34,7 @@ class LeaveTypeController extends Controller
         ]);
 
         return redirect()->route('leave-types.index')
-                         ->with('success', 'Aina ya likizo imeongezwa kwa mafanikio!');
+            ->with('success', 'Leave type created successfully!');
     }
 
     public function edit(LeaveType $leaveType)
@@ -58,13 +58,14 @@ class LeaveTypeController extends Controller
         ]);
 
         return redirect()->route('leave-types.index')
-                         ->with('success', 'Aina ya likizo imehaririwa kwa mafanikio!');
+            ->with('success', 'Leave type updated successfully!');
     }
 
     public function destroy(LeaveType $leaveType)
     {
         $leaveType->delete();
+
         return redirect()->route('leave-types.index')
-                         ->with('success', 'Aina ya likizo imefutwa!');
+            ->with('success', 'Leave type deleted successfully!');
     }
 }

@@ -49,16 +49,16 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <label>Date of Birth <span class="text-muted">(Optional)</span></label>
-                                <input type="date" name="date_of_birth" class="form-control" 
-                                       value="{{ old('date_of_birth', $employee->date_of_birth?->format('Y-m-d')) }}">
+                                <label>Hired Date <span class="text-danger">*</span></label>
+                                <input type="date" name="date_hired" class="form-control" 
+                                       value="{{ old('date_hired', $employee->date_hired?->format('Y-m-d')) }}" required>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <label>Hired Date <span class="text-danger">*</span></label>
-                                <input type="date" name="date_hired" class="form-control" 
-                                       value="{{ old('date_hired', $employee->date_hired?->format('Y-m-d')) }}" required>
+                                <label>Contract End Date</label>
+                                <input type="date" name="contract_end_date" class="form-control"
+                                    value="{{ old('contract_end_date', $employee->contract_end_date?->format('Y-m-d') ?? '') }}">
                             </div>
                         </div>
                     </div>
@@ -79,7 +79,7 @@
                         </div>
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <label>Cheo <span class="text-danger">*</span></label>
+                                <label>Position <span class="text-danger">*</span></label>
                                 <select name="position_id" class="form-control" required>
                                     <option value="">-- Choose Department  --</option>
                                     @foreach($positions as $pos)
@@ -113,7 +113,7 @@
 
                     <!-- Role Selection -->
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <div class="mb-3">
                                 <label>Role <span class="text-danger">*</span></label>
                                 <select name="role" class="form-control" required>
@@ -124,6 +124,33 @@
                                         </option>
                                     @endforeach
                                 </select>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label class="form-label">Status <span class="text-danger">*</span></label>
+                                <select name="status" class="form-select" required>
+                                    <option value="active" {{ old('status', $employee->status ?? 'active') == 'active' ? 'selected' : '' }}>
+                                        Active
+                                    </option>
+                                    <option value="inactive" {{ old('status', $employee->status ?? '') == 'inactive' ? 'selected' : '' }}>
+                                        Inactive
+                                    </option>
+                                    <option value="terminated" {{ old('status', $employee->status ?? '') == 'terminated' ? 'selected' : '' }}>
+                                        Terminated
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label>Reason for Status Change (Optional)</label>
+                                <input type="text" name="status_reason" class="form-control" placeholder="e.g. End of contract, Resignation...">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label>Date of Birth <span class="text-muted">(Optional)</span></label>
+                                <input type="date" name="date_of_birth" class="form-control" 
+                                    value="{{ old('date_of_birth', $employee->date_of_birth?->format('Y-m-d')) }}">
                             </div>
                         </div>
                     </div>

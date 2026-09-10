@@ -23,11 +23,12 @@ class Employee extends Model
         'date_hired',
         'gender',
         'marital_status',
-        'photo',                   
+        'photo',
         'basic_salary',
         'nssf_employee',
         'allowances',
         'status',
+        'contract_end_date',
     ];
 
     public function user()
@@ -50,6 +51,11 @@ class Employee extends Model
         return $this->hasMany(LeaveRequest::class);
     }
 
+    public function documents()
+    {
+        return $this->hasMany(EmployeeDocument::class);
+    }
+
     // Auto-generate employee number on creation
     public static function boot()
     {
@@ -59,8 +65,8 @@ class Employee extends Model
             if (empty($employee->employee_number)) {
                 $year = date('Y');
                 $lastEmployee = self::where('employee_number', 'LIKE', "EMP-{$year}-%")
-                                    ->orderBy('employee_number', 'desc')
-                                    ->first();
+                    ->orderBy('employee_number', 'desc')
+                    ->first();
 
                 if ($lastEmployee) {
                     $lastNumber = (int) substr($lastEmployee->employee_number, -3);
@@ -79,7 +85,7 @@ class Employee extends Model
         return [
             'date_hired' => 'date',
             'date_of_birth' => 'date',
+            'contract_end_date' => 'date',
         ];
     }
-
 }

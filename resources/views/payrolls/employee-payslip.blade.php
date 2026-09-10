@@ -12,18 +12,23 @@
                     <div class="card-header bg-white border-bottom">
                         <div class="d-flex align-items-center justify-content-between">
                             <!-- Logo -->
-                            <div>
-                                <img src="{{ asset('images/logo.png') }}" alt="Company Logo" 
-                                     style="max-height: 70px; width: auto;">
-                            </div>
+                            @if(setting('logo'))
+                                <img src="{{ asset('storage/' . setting('logo')) }}"
+                                    alt="{{ setting('platform_name', 'HRM System') }}"
+                                    style="max-height: 150px; width: auto;">
+                            @else
+                                <span class="fw-bold" style="color: #f7f2eb;">
+                                    {{ setting('platform_name', 'HRM System') }}
+                                </span>
+                            @endif
                             
                             <!-- Company Address -->
                             <div class="text-end">
-                                <strong>{{ config('app.name', 'Your Company Ltd') }}</strong><br>
+                                <strong>{{ setting('platform_name', 'HRM System') }}</strong><br>
                                 <small>
-                                    Dar es Salaam, Tanzania<br>
-                                    Phone: +255 123 456 789<br>
-                                    Email: info@yourcompany.co.tz<br>
+                                    Phone: {{ setting('support_phone', 'HRM System') }}<br>
+                                    Email: {{ setting('support_email', 'HRM System') }}<br>
+                                    Location: {{ setting('location', 'Dar Es Salaam') }}<br>
                                     TIN: 123-456-789
                                 </small>
                             </div>
@@ -49,57 +54,59 @@
                         </div>
 
                         <!-- Salary Breakdown -->
-                        <table class="table table-bordered table-striped">
-                            <thead class="table-light">
-                                <tr>
-                                    <th>Notes</th>
-                                    <th class="text-end">Amount (TZS)</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>Basic Salary</td>
-                                    <td class="text-end">{{ number_format($payroll->basic_salary, 0) }}</td>
-                                </tr>
-                                <tr>
-                                    <td>Allowances</td>
-                                    <td class="text-end">{{ number_format($payroll->allowances, 0) }}</td>
-                                </tr>
-                                <tr class="table-success fw-bold">
-                                    <td>Gross Salary</td>
-                                    <td class="text-end">{{ number_format($payroll->gross_salary, 0) }}</td>
-                                </tr>
-                                <tr>
-                                    <td colspan="2" class="fw-bold">DEDUCTIONS</td>
-                                </tr>
-                                <tr>
-                                    <td>NSSF (10%)</td>
-                                    <td class="text-end">{{ number_format($payroll->nssf_employee, 0) }}</td>
-                                </tr>
-                                <tr>
-                                    <td>NHIF</td>
-                                    <td class="text-end">{{ number_format($payroll->nhif, 0) }}</td>
-                                </tr>
-                                <tr>
-                                    <td>PAYE</td>
-                                    <td class="text-end">{{ number_format($payroll->paye, 0) }}</td>
-                                </tr>
-                                <tr>
-                                    <td>Other Deductions</td>
-                                    <td class="text-end">{{ number_format($payroll->other_deductions, 0) }}</td>
-                                </tr>
-                                <tr class="table-danger fw-bold">
-                                    <td>Total Deductions</td>
-                                    <td class="text-end">
-                                        {{ number_format($payroll->nssf_employee + $payroll->nhif + $payroll->paye + $payroll->other_deductions, 0) }}
-                                    </td>
-                                </tr>
-                                <tr class="table-info fs-5 fw-bold">
-                                    <td>NET SALARY</td>
-                                    <td class="text-end">TZS {{ number_format($payroll->net_salary, 0) }}</td>
-                                </tr>
-                            </tbody>
-                        </table>
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-striped">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th>Notes</th>
+                                        <th class="text-end">Amount (TZS)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Basic Salary</td>
+                                        <td class="text-end">{{ number_format($payroll->basic_salary, 0) }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Allowances</td>
+                                        <td class="text-end">{{ number_format($payroll->allowances, 0) }}</td>
+                                    </tr>
+                                    <tr class="table-success fw-bold">
+                                        <td>Gross Salary</td>
+                                        <td class="text-end">{{ number_format($payroll->gross_salary, 0) }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2" class="fw-bold">DEDUCTIONS</td>
+                                    </tr>
+                                    <tr>
+                                        <td>NSSF (10%)</td>
+                                        <td class="text-end">{{ number_format($payroll->nssf_employee, 0) }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>NHIF</td>
+                                        <td class="text-end">{{ number_format($payroll->nhif, 0) }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>PAYE</td>
+                                        <td class="text-end">{{ number_format($payroll->paye, 0) }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Other Deductions</td>
+                                        <td class="text-end">{{ number_format($payroll->other_deductions, 0) }}</td>
+                                    </tr>
+                                    <tr class="table-danger fw-bold">
+                                        <td>Total Deductions</td>
+                                        <td class="text-end">
+                                            {{ number_format($payroll->nssf_employee + $payroll->nhif + $payroll->paye + $payroll->other_deductions, 0) }}
+                                        </td>
+                                    </tr>
+                                    <tr class="table-info fs-5 fw-bold">
+                                        <td>NET SALARY</td>
+                                        <td class="text-end">TZS {{ number_format($payroll->net_salary, 0) }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
 
                         <div class="text-center mt-5 text-muted small">
                             <p>Thank you for your hard work. You will be paid according to company policy.</p>

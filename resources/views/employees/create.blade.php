@@ -44,14 +44,14 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <label>Date of Birth <span class="text-muted">(Optional)</span></label>
-                                <input type="date" name="date_of_birth" class="form-control">
+                                <label>Hired Date <span class="text-danger">*</span></label>
+                                <input type="date" name="date_hired" class="form-control" required>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <label>Hired Date <span class="text-danger">*</span></label>
-                                <input type="date" name="date_hired" class="form-control" required>
+                                <label>Contract End Date</label>
+                                <input type="date" name="contract_end_date" class="form-control">
                             </div>
                         </div>
                     </div>
@@ -59,7 +59,7 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <label>Idara <span class="text-danger">*</span></label>
+                                <label>Department <span class="text-danger">*</span></label>
                                 <select name="department_id" class="form-control" required>
                                     <option value="">-- Choose Department --</option>
                                     @foreach($departments as $dept)
@@ -70,7 +70,7 @@
                         </div>
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <label>Cheo <span class="text-danger">*</span></label>
+                                <label>Position <span class="text-danger">*</span></label>
                                 <select name="position_id" class="form-control" required>
                                     <option value="">-- Choose Position --</option>
                                     @foreach($positions as $pos)
@@ -94,15 +94,15 @@
                         </div>
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <label>Basic Salary (TZS)</label>
-                                <input type="number" name="basic_salary" class="form-control" step="0.01">
+                                <label>Basic Salary (TZS) <span class="text-danger">*</span></label></label>
+                                <input type="number" name="basic_salary" class="form-control" step="0.01" required>
                             </div>
                         </div>
                     </div>
 
                     <!-- Role Selection -->
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <div class="mb-3">
                                 <label>Role <span class="text-danger">*</span></label>
                                 <select name="role" class="form-control" required>
@@ -111,6 +111,28 @@
                                         <option value="{{ $role->name }}">{{ $role->name }}</option>
                                     @endforeach
                                 </select>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label class="form-label">Status <span class="text-danger">*</span></label>
+                                <select name="status" class="form-select" required>
+                                    <option value="active">
+                                        Active
+                                    </option>
+                                    <option value="inactive">
+                                        Inactive
+                                    </option>
+                                    <option value="terminated">
+                                        Terminated
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label>Date of Birth <span class="text-muted">(Optional)</span></label>
+                                <input type="date" name="date_of_birth" class="form-control">
                             </div>
                         </div>
                     </div>

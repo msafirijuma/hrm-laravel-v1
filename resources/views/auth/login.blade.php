@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - HRM System</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
     
     <style>
@@ -33,7 +34,7 @@
                         
                         <div class="text-center mb-4">
                             <h1 class="brand-logo text-primary">🏢</h1>
-                            <h3 class="fw-bold">HRM System</h3>
+                            <h3 class="fw-bold">{{ setting('platform_name', 'HRM System') }}</h3>
                             <p class="text-muted">Login </p>
                         </div>
 

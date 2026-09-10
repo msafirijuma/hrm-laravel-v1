@@ -3,13 +3,20 @@
 namespace App\Traits;
 
 use App\Models\ActivityLog;
+use \App\Models\Employee;
+use \App\Models\Department;
+use \App\Models\LeaveRequest;
+use \App\Models\LeaveType;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
 
+/**
+ * @mixin \Illuminate\Database\Eloquent\Model
+ */
 trait Loggable
 {
-    
+
     public static function bootLoggable()
     {
         static::created(function ($model) {
@@ -17,7 +24,7 @@ trait Loggable
         });
 
         static::updated(function ($model) {
-            
+
             $oldValues = array_intersect_key($model->getOriginal(), $model->getChanges());
             $newValues = $model->getChanges();
 
@@ -35,12 +42,12 @@ trait Loggable
     {
         try {
             ActivityLog::create([
-                'user_id'     => Auth::check() ? Auth::id() : null, 
+                'user_id'     => Auth::check() ? Auth::id() : null,
                 'action'      => $action,
                 'model_type'  => get_class($model),
                 'model_id'    => $model->id ?? null,
                 'description' => self::getDescription($action, $model),
-                'old_values'  => !empty($old) ? json_encode($old) : null, 
+                'old_values'  => !empty($old) ? json_encode($old) : null,
                 'new_values'  => !empty($new) ? json_encode($new) : null,
                 'ip_address'  => request()->ip(),
             ]);
@@ -51,20 +58,24 @@ trait Loggable
 
     protected static function getDescription($action, $model)
     {
-        $modelName = class_basename($model);
+        $name = class_basename($model);
 
-        if ($model instanceof \App\Models\Employee) {
-            return ucfirst($action) . " employee: " . ($model->first_name ?? '') . ' ' . ($model->last_name ?? '');
+        if ($model instanceof Employee) {
+            return ucfirst($action) . ' employee: ' . ($model->first_name ?? '') . ' ' . ($model->last_name ?? '');
         }
 
-        if ($model instanceof \App\Models\LeaveRequest) {
-            return ucfirst($action) . " leave request for employee ID: " . ($model->employee_id ?? 'N/A');
+        if ($model instanceof LeaveType) {
+            return ucfirst($action) . ' leave type: ' . ($model->name ?? '');
         }
 
-        if ($model instanceof \App\Models\Department) {
-            return ucfirst($action) . " department: " . ($model->name ?? '');
+        if ($model instanceof LeaveRequest) {
+            return ucfirst($action) . ' leave request';
         }
 
-        return ucfirst($action) . " " . $modelName;
+        if ($model instanceof Department) {
+            return ucfirst($action) . ' department: ' . ($model->name ?? '');
+        }
+
+        return ucfirst($action) . ' ' . $name;
     }
 }

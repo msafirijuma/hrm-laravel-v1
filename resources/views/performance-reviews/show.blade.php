@@ -41,7 +41,7 @@
 
                 <!-- Strengths -->
                 <div class="mb-4">
-                    <h5 class="text-success"><i class="fas fa-thumbs-up"></i> Strengths (Good tiding)</h5>
+                    <h5 class="text-success"><i class="fas fa-thumbs-up"></i> Strengths</h5>
                     <div class="p-3 bg-light border rounded">
                         {{ $performanceReview->strengths }}
                     </div>
@@ -50,7 +50,7 @@
                 <!-- Weaknesses -->
                 @if($performanceReview->weaknesses)
                 <div class="mb-4">
-                    <h5 class="text-warning"><i class="fas fa-exclamation-triangle"></i> Areas to Improve</h5>
+                    <h5 class="text-warning"><i class="fas fa-exclamation-triangle"></i> Weaknesses</h5>
                     <div class="p-3 bg-light border rounded">
                         {{ $performanceReview->weaknesses }}
                     </div>

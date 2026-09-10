@@ -18,7 +18,8 @@ class DatabaseSeeder extends Seeder
         $this->call([
             DepartmentSeeder::class,
             PositionSeeder::class,
-            EmployeeSeeder::class,   
+            EmployeeSeeder::class,
+            PublicHolidaySeeder::class,
         ]);
     }
 }

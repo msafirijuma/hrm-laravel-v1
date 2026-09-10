@@ -16,16 +16,17 @@ class PayrollController extends Controller
     public function index()
     {
         $payrolls = Payroll::with('employee.department')
-                        ->orderBy('month', 'desc')
-                        ->paginate(15);
+            ->orderBy('month', 'desc')
+            ->paginate(15);
         return view('payrolls.index', compact('payrolls'));
     }
 
     public function create()
     {
         $employees = Employee::with('department')
-                        ->where('status', 'active')
-                        ->get();
+            ->where('status', 'active')
+            ->orderBy('first_name')
+            ->get();
         $currentMonth = Carbon::now()->format('Y-m');
         return view('payrolls.create', compact('employees', 'currentMonth'));
     }
@@ -42,14 +43,19 @@ class PayrollController extends Controller
         $month = $request->month;
 
         if (Payroll::where('employee_id', $employee->id)->where('month', $month)->exists()) {
-            return redirect()->back()->with('error', 'Payroll tayari imeshatengenezwa kwa mwezi huu.');
+            return redirect()->back()->with('error', 'The payroll of this employee has already been prepared for ' . $month);
+        }
+
+        if ($employee->status !== 'active') {
+            return redirect()->route('payrolls.create')
+                ->with('error', 'This employee is inactive. You cannot generate payroll for this employee.');
         }
 
         $payrollData = $this->calculatePayroll($employee, $request);
         Payroll::create($payrollData);
 
         return redirect()->route('payrolls.index')
-                         ->with('success', 'Payroll imetengenezwa kwa ' . $employee->first_name);
+            ->with('success', 'Payroll prepared for ' . $employee->first_name);
     }
 
     public function show(Payroll $payroll)
@@ -73,6 +79,16 @@ class PayrollController extends Controller
             'department_id' => 'nullable|exists:departments,id',
         ]);
 
+        $month = $request->month;
+
+        // Check if payrolls for this month exists
+        $existingCount = Payroll::where('month', $month)->count();
+
+        if ($existingCount > 0) {
+            return redirect()->route('payrolls.index')
+                ->with('error', "Payrolls za mwezi {$month} zimeshatengenezwa ({$existingCount} records). Unaweza kuhariri tu, si ku-generate upya.");
+        }
+
         $query = Employee::with('department', 'position')->where('status', 'active');
 
         if ($request->department_id) {
@@ -92,13 +108,22 @@ class PayrollController extends Controller
             'employees' => 'required|array',
         ]);
 
+        $month = $request->month;
+
+        // Double-check
+        if (Payroll::where('month', $month)->exists()) {
+            return redirect()->route('payrolls.index')
+                ->with('error', "Payrolls za mwezi {$month} zimeshatengenezwa. Generate imezuiwa.");
+        }
+
         $created = 0;
         $month = $request->month;
 
         foreach ($request->employees as $employeeId => $data) {
             $employee = Employee::find($employeeId);
-            if (!$employee) continue;
+            if (!$employee || $employee->status !== 'active') continue;
 
+            // Extra safety per employee
             if (Payroll::where('employee_id', $employee->id)->where('month', $month)->exists()) {
                 continue;
             }
@@ -112,7 +137,7 @@ class PayrollController extends Controller
         }
 
         return redirect()->route('payrolls.index')
-                         ->with('success', "Payroll imetengenezwa kwa wafanyakazi {$created} kwa mwezi {$month}");
+            ->with('success', "Payroll prepared for employees {$created} for the month {$month}");
     }
 
     // ******************* HELPER METHODS *****************
@@ -175,7 +200,7 @@ class PayrollController extends Controller
     public function markAsPaid(Payroll $payroll)
     {
         if ($payroll->status === 'paid') {
-            return redirect()->back()->with('error', 'Payroll tayari imelipwa.');
+            return redirect()->back()->with('error', 'Payroll is already paid.');
         }
 
         $payroll->update([
@@ -184,7 +209,7 @@ class PayrollController extends Controller
         ]);
 
         return redirect()->back()
-                        ->with('success', 'Payroll ya ' . $payroll->employee->first_name . ' imewekwa kama Paid!');
+            ->with('success', 'Payroll for ' . $payroll->employee->first_name . ' marked as Paid!');
     }
 
     // Edit Payroll
@@ -204,7 +229,7 @@ class PayrollController extends Controller
         ]);
 
         $gross = $payroll->basic_salary + $request->input('allowances', 0);
-        
+
         $nssf = $payroll->basic_salary * 0.10;
         $nhif = $this->calculateNHIF($payroll->basic_salary);
         $paye = $this->calculatePAYE($gross);
@@ -224,7 +249,7 @@ class PayrollController extends Controller
         ]);
 
         return redirect()->route('payrolls.index')
-                        ->with('success', 'Payroll imerekebishwa!');
+            ->with('success', 'Payroll updated successfully!');
     }
 
     // Download payslip
@@ -240,10 +265,10 @@ class PayrollController extends Controller
         }
 
         $pdf = Pdf::loadView('payrolls.pdf-payslip', compact('payroll'));
-        
+
         return $pdf->download('payslip-' . $payroll->employee->employee_number . '-' . $payroll->month . '.pdf');
     }
-    
+
     // Show all payslips for the authenticated employee
     public function myPayslips()
     {
@@ -256,8 +281,8 @@ class PayrollController extends Controller
         }
 
         $payrolls = Payroll::where('employee_id', $employee->id)
-                            ->orderBy('month', 'desc')
-                            ->paginate(12);
+            ->orderBy('month', 'desc')
+            ->paginate(12);
 
         return view('payrolls.my-payslips', compact('payrolls'));
     }
@@ -269,7 +294,7 @@ class PayrollController extends Controller
         $user = Auth::user();
 
         if (!$user->employee || $payroll->employee_id !== $user->employee->id) {
-            abort(403, 'Huna ruhusa ya kuona payslip hii.');
+            abort(403, 'You do not have a permission to view this slip.');
         }
 
         $payroll->load('employee.department', 'employee.position');
@@ -280,11 +305,11 @@ class PayrollController extends Controller
     // Generate report
     public function reports()
     {
-        
+
         $months = Payroll::select('month')
-                        ->distinct()
-                        ->orderBy('month', 'desc')
-                        ->pluck('month');
+            ->distinct()
+            ->orderBy('month', 'desc')
+            ->pluck('month');
 
         $totalPayroll = Payroll::sum('net_salary');
         $totalEmployeesPaid = Payroll::distinct('employee_id')->count('employee_id');
@@ -300,8 +325,8 @@ class PayrollController extends Controller
         }
 
         $payrolls = Payroll::with('employee.department')
-                        ->where('month', $month)
-                        ->get();
+            ->where('month', $month)
+            ->get();
 
         $summary = [
             'total_basic' => $payrolls->sum('basic_salary'),
@@ -310,8 +335,8 @@ class PayrollController extends Controller
             'total_nssf' => $payrolls->sum('nssf_employee'),
             'total_nhif' => $payrolls->sum('nhif'),
             'total_paye' => $payrolls->sum('paye'),
-            'total_deductions' => $payrolls->sum('nssf_employee') + $payrolls->sum('nhif') + 
-                                $payrolls->sum('paye') + $payrolls->sum('other_deductions'),
+            'total_deductions' => $payrolls->sum('nssf_employee') + $payrolls->sum('nhif') +
+                $payrolls->sum('paye') + $payrolls->sum('other_deductions'),
             'total_net' => $payrolls->sum('net_salary'),
             'employee_count' => $payrolls->count(),
         ];

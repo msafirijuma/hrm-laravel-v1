@@ -38,12 +38,12 @@
                 </div>
 
                 <div class="mb-3">
-                    <label>Strengths (Good tiding)</label>
+                    <label>Strengths</label>
                     <textarea name="strengths" class="form-control" rows="4" required></textarea>
                 </div>
 
                 <div class="mb-3">
-                    <label>Weaknesses / Areas to Improve</label>
+                    <label>Weaknesses</label>
                     <textarea name="weaknesses" class="form-control" rows="3"></textarea>
                 </div>
 
@@ -53,6 +53,7 @@
                 </div>
 
                 <button type="submit" class="btn btn-success btn-lg">Save Review</button>
+                <a href="{{ route('performance-reviews.index') }}" type="submit" class="btn btn-secondary btn-lg">Cancel</a>
             </form>
         </div>
     </div>

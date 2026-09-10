@@ -2,10 +2,12 @@
 
 namespace App\Models;
 
+use App\Traits\Loggable;
 use Illuminate\Database\Eloquent\Model;
 
 class PerformanceReview extends Model
 {
+    use Loggable;
     protected $fillable = [
         'employee_id',
         'reviewed_by',

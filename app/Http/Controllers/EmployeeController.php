@@ -13,9 +13,16 @@ use Spatie\Permission\Models\Role;
 
 class EmployeeController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $employees = Employee::with(['department', 'position', 'user'])->latest()->paginate(10);
+        $query = Employee::with(['department', 'position', 'user']);
+
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+
+        $employees = $query->latest()->paginate(10)->withQueryString();
+
         return view('employees.index', compact('employees'));
     }
 
@@ -38,8 +45,9 @@ class EmployeeController extends Controller
             'position_id' => 'required|exists:positions,id',
             'date_hired' => 'required|date',
             'gender' => 'required|in:Male,Female',
-            'basic_salary' => 'nullable|numeric|min:0',
+            'basic_salary' => 'required|numeric|min:0',
             'role' => 'required|exists:roles,name',
+            'status' => 'required|in:active,on_leave,inactive,terminated',
             'photo' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ]);
 
@@ -74,7 +82,7 @@ class EmployeeController extends Controller
         Employee::create($data);
 
         return redirect()->route('employees.index')
-            ->with('success', 'Mfanyakazi ameongezwa kwa mafanikio! Akaunti imeundwa (Default Password: password)');
+            ->with('success', 'Employee added successfully! Account created (Default Password: password)');
     }
 
     public function show(Employee $employee)
@@ -104,6 +112,7 @@ class EmployeeController extends Controller
             'gender' => 'required|in:Male,Female',
             'basic_salary' => 'nullable|numeric|min:0',
             'role' => 'required|exists:roles,name',
+            'status' => 'required|in:active,on_leave,inactive,terminated',
             'photo' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ]);
 
@@ -114,6 +123,18 @@ class EmployeeController extends Controller
                 Storage::delete('public/' . $employee->photo);
             }
             $data['photo'] = $request->file('photo')->store('employees', 'public');
+        }
+
+        // Log status change
+        if ($request->status !== $employee->status) {
+            \App\Models\EmployeeStatusHistory::create([
+                'employee_id' => $employee->id,
+                'old_status'  => $employee->status,
+                'new_status'  => $request->status,
+                'changed_by'  => auth()->id(),
+                'reason'      => $request->status_reason ?? null,
+                'changed_at'  => now(),
+            ]);
         }
 
         $employee->update($data);

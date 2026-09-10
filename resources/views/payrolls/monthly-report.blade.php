@@ -4,14 +4,14 @@
 
 @section('content')
     <div class="container-fluid">
-        <div class="d-flex justify-content-between align-items-center mb-4">
+        <div class="d-md-flex justify-content-between align-items-center mb-4">
             <h2>Payroll Report - <strong>{{ $month }}</strong></h2>
             <div>
-                <a href="{{ route('payrolls.reports') }}" class="btn btn-secondary me-2">
-                    <i class="fas fa-arrow-left"></i> Back to Reports
-                </a>
                 <a href="{{ route('payrolls.index') }}" class="btn btn-primary">
                     <i class="fas fa-list"></i> View all payrolls
+                </a>
+                <a href="{{ route('payrolls.reports') }}" class="btn btn-secondary me-2">
+                    <i class="fas fa-arrow-left"></i> Back to Reports
                 </a>
             </div>
         </div>
@@ -57,7 +57,7 @@
             <div class="card-header bg-light">
                 <h5 class="mb-0">Detailed Payroll - {{ $month }}</h5>
             </div>
-            <div class="card-body p-0">
+            <div class="card-body p-3">
                 <div class="table-responsive">
                     <table class="table table-hover table-bordered mb-0" id="payrollTable">
                         <thead class="table-dark">

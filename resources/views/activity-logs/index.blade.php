@@ -7,38 +7,45 @@
 
     <div class="card">
         <div class="card-body">
-            <table class="table table-bordered table-striped table-hover" id="auditLogsTable">
-                <thead class="table-dark">
-                    <tr>
-                        <th>Date</th>
-                        <th>User</th>
-                        <th>Action</th>
-                        <th>Model</th>
-                        <th>Description</th>
-                        <th>IP Address</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @forelse($logs as $log)
-                    <tr>
-                        <td>{{ $log->created_at->format('d M Y H:i') }}</td>
-                        <td>{{ $log->user->name ?? 'System' }}</td>
-                        <td>
-                            <span class="badge bg-{{ $log->action == 'created' ? 'success' : ($log->action == 'updated' ? 'warning' : 'danger') }}">
-                                {{ ucfirst($log->action) }}
-                            </span>
-                        </td>
-                        <td>{{ class_basename($log->model_type) }}</td>
-                        <td>{{ $log->description }}</td>
-                        <td><small class="text-muted">{{ $log->ip_address }}</small></td>
-                    </tr>
-                    @empty
-                    {{-- <tr>
-                        <td colspan="6" class="text-center py-5">No activity logs yet.</td>
-                    </tr> --}}
-                    @endforelse
-                </tbody>
-            </table>
+            <div class="table-responsive">
+                <table class="table table-bordered table-striped table-hover" id="auditLogsTable">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Date</th>
+                            <th>User</th>
+                            <th>Action</th>
+                            <th>Model</th>
+                            <th>Description</th>
+                            <th>IP Address</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse($logs as $log)
+                        <tr>
+                            <td>{{ $log->created_at->format('d M Y H:i') }}</td>
+                            <td>
+                                <strong class="text-dark">{{ $log->user->name ?? 'System/Guest' }}</strong>
+                                <small class="text-muted d-block" style="font-size: 11px;">
+                                    {{ $log->user ? ($log->user->getRoleNames()->first() ?? 'User') : '—' }}
+                                </small>
+                            </td>
+                            <td>
+                                <span class="badge bg-{{ $log->action == 'created' ? 'success' : ($log->action == 'updated' ? 'warning' : 'danger') }}">
+                                    {{ ucfirst($log->action) }}
+                                </span>
+                            </td>
+                            <td>{{ class_basename($log->model_type) }}</td>
+                            <td>{{ $log->description }}</td>
+                            <td><small class="text-muted">{{ $log->ip_address }}</small></td>
+                        </tr>
+                        @empty
+                        {{-- <tr>
+                            <td colspan="6" class="text-center py-5">No activity logs yet.</td>
+                        </tr> --}}
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 @endsection

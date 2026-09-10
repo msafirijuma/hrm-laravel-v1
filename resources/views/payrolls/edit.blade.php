@@ -48,8 +48,8 @@
                     </div>
 
                     <div class="mt-4">
-                        <button type="submit" class="btn btn-success btn-lg">Save Changes</button>
-                        <a href="{{ route('payrolls.index') }}" class="btn btn-secondary btn-lg">Cancel</a>
+                        <button type="submit" class="btn btn-success btn-md mb-2 mb-md-0">Save Changes</button>
+                        <a href="{{ route('payrolls.index') }}" class="btn btn-secondary btn-md mb-2 mb-md-0">Cancel</a>
                     </div>
                 </form>
             </div>

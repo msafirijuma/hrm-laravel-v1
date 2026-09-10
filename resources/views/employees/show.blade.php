@@ -52,12 +52,12 @@
                             {{ $employee->email }}
                         </div>
                         <div class="col-md-6 mb-3">
-                            <strong>Date of Birth:</strong><br>
-                            {{ $employee->date_of_birth ? $employee->date_of_birth->format('d M Y') : '—' }}
-                        </div>
-                        <div class="col-md-6 mb-3">
                             <strong>Hire Date:</strong><br>
                             {{ $employee->date_hired ? $employee->date_hired->format('d M Y') : '—' }}
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <strong>Contract End Date:</strong><br>
+                            {{ $employee->contract_end_date ? $employee->contract_end_date->format('d M Y') : '—' }}
                         </div>
                         <div class="col-md-6 mb-3">
                             <strong>Gender:</strong><br>
@@ -67,6 +67,10 @@
                             <strong>Basic Salary:</strong><br>
                             <strong>TZS {{ number_format($employee->basic_salary, 0) }}</strong>
                         </div>
+                        <div class="col-md-6 mb-3">
+                            <strong>Date of Birth:</strong><br>
+                            {{ $employee->date_of_birth ? $employee->date_of_birth->format('d M Y') : '—' }}
+                        </div>
                     </div>
                 </div>
             </div>
@@ -74,8 +78,16 @@
     </div>
 
     <div class="mt-4">
-        <a href="{{ route('employees.index') }}" class="btn btn-secondary">Back to Employees</a>
-        <a href="{{ route('employees.edit', $employee) }}" class="btn btn-warning">Edit Info</a>
+        <a href="{{ route('employees.index') }}" class="btn btn-secondary">
+            Back
+        </a>
+        <a href="{{ route('employees.edit', $employee) }}" class="btn btn-warning">
+            Edit Info
+        </a>
+        <!--  Button -->
+        <a href="{{ route('employees.documents.index', $employee) }}" class="btn btn-primary">
+            Documents
+        </a>
     </div>
 </div>
 @endsection

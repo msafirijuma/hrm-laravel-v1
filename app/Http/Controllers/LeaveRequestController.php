@@ -13,12 +13,23 @@ class LeaveRequestController extends Controller
     // ==================== EMPLOYEE ====================
     public function create()
     {
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+
+        $employee = $user->employee;
+
+        if (!$employee || $employee->status !== 'active') {
+            return redirect()->route('dashboard')
+                ->with('error', 'You cannot request a leave. You are currently inactive.');
+        }
+
         $leaveTypes = LeaveType::all();
         return view('leave-requests.create', compact('leaveTypes'));
     }
 
     public function store(Request $request)
     {
+
         $request->validate([
             'leave_type_id' => 'required|exists:leave_types,id',
             'start_date' => 'required|date',
@@ -28,15 +39,20 @@ class LeaveRequestController extends Controller
 
         $employee = Auth::user()->employee;
 
-        if (!$employee) {
-            return redirect()->back()->with('error', 'Taarifa zako hazijakamilika.');
+        if (!$employee || $employee->status !== 'active') {
+            return redirect()->route('dashboard')
+                ->with('error', 'You cannot request a leave. You are currently inactive.');
         }
 
-        // Tunasoma tarehe kwa usahihi hapa
+        if (!$employee) {
+            return redirect()->back()->with('error', 'Your details are incomplete.');
+        }
+
+        // Starting to Ending (Leave Request)
         $start = Carbon::parse($request->start_date);
         $end = Carbon::parse($request->end_date);
 
-        // Hesabu sahihi: Start Date inatafuta utofauti kwenda End Date (Inaleta chanya)
+        // Start Date to End Date 
         $daysRequested = $start->diffInDays($end) + 1;
 
         LeaveRequest::create([
@@ -44,21 +60,21 @@ class LeaveRequestController extends Controller
             'leave_type_id' => $request->leave_type_id,
             'start_date' => $request->start_date,
             'end_date' => $request->end_date,
-            'days_requested' => $daysRequested, 
+            'days_requested' => $daysRequested,
             'reason' => $request->reason,
             'status' => 'pending',
         ]);
 
         return redirect()->route('my-leaves')
-                         ->with('success', 'Ombi la likizo limewasilishwa kwa mafanikio!');
+            ->with('success', 'Leave request submitted successfully!');
     }
 
     public function myLeaves()
     {
         $leaves = Auth::user()->employee->leaveRequests()
-                    ->with('leaveType')
-                    ->latest()
-                    ->get();
+            ->with('leaveType')
+            ->latest()
+            ->get();
         return view('leave-requests.my-leaves', compact('leaves'));
     }
 
@@ -66,9 +82,9 @@ class LeaveRequestController extends Controller
     public function pending()
     {
         $pendingLeaves = LeaveRequest::with(['employee.department', 'leaveType'])
-                            ->where('status', 'pending')
-                            ->latest()
-                            ->get();
+            ->where('status', 'pending')
+            ->latest()
+            ->get();
 
         return view('leave-requests.pending', compact('pendingLeaves'));
     }
@@ -82,10 +98,10 @@ class LeaveRequestController extends Controller
         ]);
 
         return redirect()->route('leave-requests.pending')
-                        ->with('success', 'Ombi limekubaliwa!');
+            ->with('success', 'Leave request approved!');
     }
 
-    // Tulibadilisha hapa ili ipokee $id kutoka kwenye ile Form ya siri ya Reject kwenye Blade
+    // reject leave request with reason
     public function reject(Request $request, int $id)
     {
         $request->validate([
@@ -102,13 +118,13 @@ class LeaveRequestController extends Controller
         ]);
 
         return redirect()->route('leave-requests.pending')
-                        ->with('success', 'Ombi limekataliwa!');
+            ->with('success', 'Leave request rejected!');
     }
     public function edit(LeaveRequest $leaveRequest)
     {
-        // Only allow editing if pending and belongs to the user
+        // Only allow editing if pending belongs to the authenticated employee
         if ($leaveRequest->employee_id !== Auth::user()->employee->id || $leaveRequest->status !== 'pending') {
-            abort(403, 'Huna ruhusa ya kuhariri ombi hili.');
+            abort(403, 'You are not allowed to edit this leave request.');
         }
 
         $leaveTypes = LeaveType::all();
@@ -116,30 +132,31 @@ class LeaveRequestController extends Controller
     }
 
     public function update(Request $request, LeaveRequest $leaveRequest)
-{
-    if ($leaveRequest->employee_id !== Auth::user()->employee->id || $leaveRequest->status !== 'pending') {
-        abort(403);
+    {
+        if ($leaveRequest->employee_id !== Auth::user()->employee->id || $leaveRequest->status !== 'pending') {
+            abort(403);
+        }
+
+        $request->validate([
+            'leave_type_id' => 'required|exists:leave_types,id',
+            'start_date' => 'required|date',
+            'end_date' => 'required|date|after_or_equal:start_date',
+            'reason' => 'required|string|max:500',
+        ]);
+
+        $leaveRequest->update([
+            'leave_type_id' => $request->leave_type_id,
+            'start_date' => $request->start_date,
+            'end_date' => $request->end_date,
+            'days_requested' => Carbon::parse($request->end_date)
+                ->diffInDays(Carbon::parse($request->start_date)) + 1,
+            'reason' => $request->reason,
+        ]);
+
+        return redirect()->route('my-leaves')
+            ->with('success', 'Leave request updated successfully!');
     }
 
-    $request->validate([
-        'leave_type_id' => 'required|exists:leave_types,id',
-        'start_date' => 'required|date',
-        'end_date' => 'required|date|after_or_equal:start_date',
-        'reason' => 'required|string|max:500',
-    ]);
-
-    $leaveRequest->update([
-        'leave_type_id' => $request->leave_type_id,
-        'start_date' => $request->start_date,
-        'end_date' => $request->end_date,
-        'days_requested' => Carbon::parse($request->end_date)
-                                ->diffInDays(Carbon::parse($request->start_date)) + 1,
-        'reason' => $request->reason,
-    ]);
-
-    return redirect()->route('my-leaves')
-                     ->with('success', 'Ombi la likizo limehaririwa!');
-}
     public function destroy(LeaveRequest $leaveRequest)
     {
         if ($leaveRequest->employee_id !== Auth::user()->employee->id || $leaveRequest->status !== 'pending') {
@@ -149,6 +166,6 @@ class LeaveRequestController extends Controller
         $leaveRequest->delete();
 
         return redirect()->route('my-leaves')
-                        ->with('success', 'Ombi la likizo limeghairiwa!');
+            ->with('success', 'Leave request deleted successfully!');
     }
 }

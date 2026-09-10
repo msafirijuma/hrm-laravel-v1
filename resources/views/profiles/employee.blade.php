@@ -35,7 +35,7 @@
             </div>
 
             <!-- Right Side - Details -->
-            <div class="col-lg-8">
+            <div class="col-lg-8 mt-5 mt-md-0">
                 <div class="card shadow-sm">
                     <div class="card-header bg-primary text-white">
                         <h5 class="mb-0">Information</h5>

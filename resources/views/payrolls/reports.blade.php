@@ -6,10 +6,10 @@
     <h2 class="mb-4">Payroll Reports</h2>
 
     <div class="row">
-        <div class="col-md-4">
+        <div class="col-md-4 mb-2">
             <div class="card text-white bg-info">
                 <div class="card-body">
-                    <h5>Total Payroll Yote</h5>
+                    <h5>Total Payroll</h5>
                     <h3>TZS {{ number_format($totalPayroll, 0) }}</h3>
                 </div>
             </div>

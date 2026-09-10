@@ -8,7 +8,6 @@
         <div class="row">
             <div class="d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center mb-4 gap-3">
                 <div>
-                    {{-- <h1 class="h3 mb-1 text-gray-800">Dashboard</h1> --}}
                     <p class="mb-0 mt-3 text-muted small">
                         Welcome, <strong class="me-2"><?= htmlspecialchars($_SESSION['name'] ?? $_SESSION['username'] ?? 'User')?></strong> • <?= date('l, d F Y') ?>
                     </p>
