@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\PerformanceReview;
 use App\Models\Employee;
+use App\Notifications\PerformanceReviewNotification;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
@@ -74,7 +75,7 @@ class PerformanceReviewController extends Controller
             }
         }
 
-        PerformanceReview::create([
+        $review  = PerformanceReview::create([
             'employee_id'     => $request->employee_id,
             'reviewed_by'     => Auth::id(),
             'period'          => $request->period,
@@ -84,6 +85,13 @@ class PerformanceReviewController extends Controller
             'recommendations' => $request->recommendations,
             'status'          => 'completed',
         ]);
+
+        // $review = PerformanceReview::create([...]);
+        $review->load('employee.user');
+
+        if ($review->employee && $review->employee->user) {
+            $review->employee->user->notify(new PerformanceReviewNotification($review));
+        }
 
         return redirect()->route('performance-reviews.index')
             ->with('success', 'Performance Review saved successfully!');

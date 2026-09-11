@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Announcement;
+use App\Models\User;
+use App\Notifications\NewAnnouncementNotification;
 use Illuminate\Http\Request;
 
 class AnnouncementController extends Controller
@@ -31,7 +33,7 @@ class AnnouncementController extends Controller
             'expires_at'   => 'nullable|date|after:published_at',
         ]);
 
-        Announcement::create([
+        $announcement = Announcement::create([
             'title'        => $request->title,
             'body'         => $request->body,
             'priority'     => $request->priority,
@@ -40,6 +42,17 @@ class AnnouncementController extends Controller
             'published_at' => $request->published_at ?? now(),
             'expires_at'   => $request->expires_at,
         ]);
+
+        if (in_array($announcement->priority, ['urgent', 'important'])) {
+            $users = User::whereHas('roles', function ($q) {
+                // optional filter
+            })->get();
+
+            \Illuminate\Support\Facades\Notification::send(
+                $users,
+                new NewAnnouncementNotification($announcement)
+            );
+        }
 
         return redirect()->route('announcements.index')
             ->with('success', 'Announcement added successfully!');

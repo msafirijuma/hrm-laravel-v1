@@ -6,9 +6,11 @@
     <div class="container">
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h2>Performance Review</h2>
+            @if (auth()->user()->hasRole(['Manager', 'HR', 'Super Admin']))
             <a href="{{ route('performance-reviews.index') }}" class="btn btn-secondary">
                 <i class="fas fa-arrow-left me-2"></i> Back to Reviews
             </a>
+            @endif
         </div>
 
         <div class="card shadow-sm">

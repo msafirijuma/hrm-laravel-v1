@@ -137,10 +137,19 @@ class EmployeeController extends Controller
             ]);
         }
 
+        $oldStatus = $employee->status;
+        
         $employee->update($data);
 
         // Update Role
         $employee->user->syncRoles([$request->role]);
+
+        if ($request->status !== $oldStatus) {
+            $admins = User::role(['Super Admin', 'HR'])->get();
+            foreach ($admins as $admin) {
+                $admin->notify(new EmployeeStatusChangedNotification($employee, $oldStatus, $request->status));
+            }
+        }
 
         return redirect()->route('employees.index')
             ->with('success', "Employee's info updated successfully!");

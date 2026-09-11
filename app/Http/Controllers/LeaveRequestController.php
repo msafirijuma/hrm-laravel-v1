@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\LeaveRequest;
 use App\Models\LeaveType;
+use App\Models\User;
+use App\Notifications\LeaveStatusNotification;
+use App\Notifications\LeaveRequestedNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
@@ -55,7 +58,7 @@ class LeaveRequestController extends Controller
         // Start Date to End Date 
         $daysRequested = $start->diffInDays($end) + 1;
 
-        LeaveRequest::create([
+        $leaveRequest = LeaveRequest::create([
             'employee_id' => $employee->id,
             'leave_type_id' => $request->leave_type_id,
             'start_date' => $request->start_date,
@@ -64,6 +67,28 @@ class LeaveRequestController extends Controller
             'reason' => $request->reason,
             'status' => 'pending',
         ]);
+
+        $leaveRequest->load(['employee.department', 'leaveType']);
+
+        // Notify HR + Super Admin
+        $hrUsers = User::role(['Super Admin', 'HR'])->get();
+        foreach ($hrUsers as $hr) {
+            $hr->notify(new LeaveRequestedNotification($leaveRequest));
+        }
+
+        // Notify Manager (department) 
+        $employee = $leaveRequest->employee;
+        if ($employee && $employee->department_id) {
+            $managers = User::role('Manager')
+                ->whereHas('employee', function ($q) use ($employee) {
+                    $q->where('department_id', $employee->department_id);
+                })
+                ->get();
+
+            foreach ($managers as $manager) {
+                $manager->notify(new LeaveRequestedNotification($leaveRequest));
+            }
+        }
 
         return redirect()->route('my-leaves')
             ->with('success', 'Leave request submitted successfully!');
@@ -97,6 +122,12 @@ class LeaveRequestController extends Controller
             'approved_at' => now(),
         ]);
 
+        $leaveRequest->load('employee.user');
+
+        if ($leaveRequest->employee && $leaveRequest->employee->user) {
+            $leaveRequest->employee->user->notify(new LeaveStatusNotification($leaveRequest));
+        }
+
         return redirect()->route('leave-requests.pending')
             ->with('success', 'Leave request approved!');
     }
@@ -116,6 +147,12 @@ class LeaveRequestController extends Controller
             'approved_at' => now(),
             'rejection_reason' => $request->rejection_reason,
         ]);
+
+        $leaveRequest->load('employee.user');
+
+        if ($leaveRequest->employee && $leaveRequest->employee->user) {
+            $leaveRequest->employee->user->notify(new LeaveStatusNotification($leaveRequest));
+        }
 
         return redirect()->route('leave-requests.pending')
             ->with('success', 'Leave request rejected!');

@@ -14,6 +14,7 @@ use App\Http\Controllers\ActivityLogController;
 use App\Http\Controllers\AnnouncementController;
 use App\Http\Controllers\PublicHolidayController;
 use App\Http\Controllers\OfficeSettingController;
+use App\Http\Controllers\NotificationController;
 
 // ====================== PUBLIC ROUTES ======================
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
@@ -50,7 +51,7 @@ Route::middleware('auth')->group(function () {
         Route::resource('departments', DepartmentController::class);
         Route::resource('employees', EmployeeController::class);
         Route::resource('leave-types', LeaveTypeController::class);
-        Route::resource('performance-reviews', PerformanceReviewController::class)->only(['index', 'show', 'create', 'store']);
+        Route::resource('performance-reviews', PerformanceReviewController::class)->only(['index', 'create', 'store']);
         Route::resource('activity-logs', ActivityLogController::class)->only(['index', 'show']);
 
         // HR Approval Request
@@ -89,11 +90,12 @@ Route::middleware('auth')->group(function () {
         Route::post('/settings/appearance', [OfficeSettingController::class, 'updateAppearance'])->name('settings.appearance');
     });
 
+    // Super Admin, HR, Manager
     Route::middleware(['auth', 'role:Super Admin,HR,Manager'])->group(function () {
         Route::get('/performance-reviews', [PerformanceReviewController::class, 'index'])->name('performance-reviews.index');
         Route::get('/performance-reviews/create', [PerformanceReviewController::class, 'create'])->name('performance-reviews.create');
         Route::post('/performance-reviews', [PerformanceReviewController::class, 'store'])->name('performance-reviews.store');
-        Route::get('/performance-reviews/{performanceReview}', [PerformanceReviewController::class, 'show'])->name('performance-reviews.show');
+        // Route::get('/performance-reviews/{performanceReview}', [PerformanceReviewController::class, 'show'])->name('performance-reviews.show');
     });
 
     // Manager Routes
@@ -136,10 +138,18 @@ Route::middleware('auth')->group(function () {
         // Announcements 
         Route::get('/announcement-board', [AnnouncementController::class, 'board'])->name('announcements.board');
 
-        // Document
+        // Documents
         Route::get('/documents/{document}/download', [EmployeeDocumentController::class, 'download'])->name('documents.download');
         Route::get('/my-documents', [EmployeeDocumentController::class, 'myDocuments'])->name('my.documents');
         Route::get('/documents/{document}/download', [EmployeeDocumentController::class, 'download'])->name('documents.download');
+
+        // Notifications
+        Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
+        Route::get('/notifications/{id}/read', [NotificationController::class, 'markAsRead'])->name('notifications.read');
+        Route::post('/notifications/mark-all-read', [NotificationController::class, 'markAllAsRead'])->name('notifications.markAllRead');
+
+        // Performance
+        Route::get('/performance-reviews/{performanceReview}', [PerformanceReviewController::class, 'show'])->name('performance-reviews.show');
     });
 
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');

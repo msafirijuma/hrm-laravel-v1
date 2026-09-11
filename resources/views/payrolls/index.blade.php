@@ -5,7 +5,7 @@
 @section('content')
     <div class="d-md-flex justify-content-between align-items-center mb-4">
         <h2>Payroll Records</h2>
-        <div>
+        <div class="d-flex">
             <a href="{{ route('payrolls.create') }}" class="btn btn-primary me-2">
                 <i class="fas fa-plus"></i> Single Payroll
             </a>
@@ -38,7 +38,7 @@
                             <th>Basic Salary</th>
                             <th>Net Salary</th>
                             <th>Status</th>
-                            <th style="width: 180px; min-width: 180px;">Actions</th>
+                            <th style="width: 200px; min-width: 200px;">Actions</th>
                         </tr>
                     </thead>
                     <tbody>

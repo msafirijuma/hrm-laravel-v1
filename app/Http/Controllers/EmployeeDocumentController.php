@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Employee;
 use App\Models\EmployeeDocument;
+use App\Notifications\DocumentUploadedNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -46,7 +47,7 @@ class EmployeeDocumentController extends Controller
         $file = $request->file('file');
         $path = $file->store('employee-documents/' . $employee->id, 'public');
 
-        EmployeeDocument::create([
+        $document = EmployeeDocument::create([
             'employee_id' => $employee->id,
             'title'       => $request->title,
             'type'        => $request->type,
@@ -57,6 +58,12 @@ class EmployeeDocumentController extends Controller
             'uploaded_by' => auth()->id(),
             'notes'       => $request->notes,
         ]);
+
+        // $document = EmployeeDocument::create([...]);
+
+        if ($employee->user) {
+            $employee->user->notify(new DocumentUploadedNotification($document));
+        }
 
         return redirect()->route('employees.documents.index', $employee)
             ->with('success', 'Document uploaded successfully!');

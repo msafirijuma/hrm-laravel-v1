@@ -17,6 +17,7 @@
                 <thead class="table-dark">
                     <tr>
                         <th>Title</th>
+                        <th>Creator</th>
                         <th>Priority</th>
                         <th>Status</th>
                         <th style="width: 120px; min-width: 120px;">Published</th>
@@ -25,32 +26,38 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @forelse($announcements as $item)
+                    @forelse($announcements as $announcement)
                     <tr>
-                        <td><strong>{{ $item->title }}</strong></td>
+                        <td><strong>{{ $announcement->title }}</strong></td>
                         <td>
-                            @if($item->priority == 'urgent')
+                            <strong>{{ $announcement->creator->name ?? 'HR' }}</strong>
+                            <small class="text-muted d-block" style="font-size: 11px;">
+                                    {{ $announcement->user ? ($announcement->user->getRoleNames()->first() ?? 'User') : '—' }}
+                                </small>
+                        </td>
+                        <td>
+                            @if($announcement->priority == 'urgent')
                                 <span class="badge bg-danger">Urgent</span>
-                            @elseif($item->priority == 'important')
+                            @elseif($announcement->priority == 'important')
                                 <span class="badge bg-warning text-dark">Important</span>
                             @else
                                 <span class="badge bg-secondary">Normal</span>
                             @endif
                         </td>
                         <td>
-                            @if($item->is_active)
+                            @if($announcement->is_active)
                                 <span class="badge bg-success">Active</span>
                             @else
                                 <span class="badge bg-secondary">Inactive</span>
                             @endif
                         </td>
-                        <td>{{ $item->published_at?->format('d M Y H:m') ?? '—' }}</td>
-                        <td>{{ $item->expires_at?->format('d M Y H:m') ?? '—' }}</td>
+                        <td>{{ $announcement->published_at?->format('d M Y H:m') ?? '—' }}</td>
+                        <td>{{ $announcement->expires_at?->format('d M Y H:m') ?? '—' }}</td>
                         <td>
-                            <a href="{{ route('announcements.edit', $item) }}" class="btn btn-sm btn-warning">
+                            <a href="{{ route('announcements.edit', $announcement) }}" class="btn btn-sm btn-warning">
                                 <i class="fas fa-edit"></i>
                             </a>
-                            <form action="{{ route('announcements.destroy', $item) }}" method="POST" style="display:inline;">
+                            <form action="{{ route('announcements.destroy', $announcement) }}" method="POST" style="display:inline;">
                                 @csrf
                                 @method('DELETE')
                                 <button class="btn btn-sm btn-danger" onclick="return confirm('Futa?')">

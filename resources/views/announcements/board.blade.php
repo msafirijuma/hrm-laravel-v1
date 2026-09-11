@@ -61,16 +61,16 @@
                     <div class="d-flex justify-content-between mb-3">
                         <div>
                             <h4 class="fw-bold mb-1">{{ $announcement->title }}</h4>
-                            <div class="d-flex gap-2 text-muted small">
+                            <div class="d-md-flex gap-2 text-muted small">
                                 <span>
                                     <i class="fas fa-user-circle me-1"></i>
                                     {{ $announcement->creator->name ?? 'HR' }}
                                 </span>
                                 <span>•</span>
-                                <span>
+                                <p>
                                     <i class="fas fa-clock me-1"></i>
                                     {{ $announcement->published_at?->diffForHumans() ?? $announcement->created_at->diffForHumans() }}
-                                </span>
+                                </p>
                             </div>
                         </div>
 

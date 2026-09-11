@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Payroll;
 use App\Models\Employee;
 use App\Models\Department;
+use App\Notifications\PayrollGeneratedNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
@@ -52,7 +53,14 @@ class PayrollController extends Controller
         }
 
         $payrollData = $this->calculatePayroll($employee, $request);
-        Payroll::create($payrollData);
+        
+        $payroll = Payroll::create($payrollData);
+
+        $payroll->load('employee.user');
+
+        if ($payroll->employee && $payroll->employee->user) {
+            $payroll->employee->user->notify(new PayrollGeneratedNotification($payroll));
+        }
 
         return redirect()->route('payrolls.index')
             ->with('success', 'Payroll prepared for ' . $employee->first_name);
@@ -62,6 +70,20 @@ class PayrollController extends Controller
     {
         $payroll->load('employee.department', 'employee.position');
         return view('payrolls.show', compact('payroll'));
+    }
+
+    public function destroy(Payroll $payroll)
+    {
+        // Prevent deletion (status is paid)
+        if ($payroll->status === 'paid') {
+            return redirect()->route('payrolls.index')
+                            ->with('error', 'Huwezi kufuta payroll ambayo imeshalipwa.');
+        }
+
+        $payroll->delete();
+
+        return redirect()->route('payrolls.index')
+                        ->with('success', 'Payroll imefutwa kwa mafanikio.');
     }
 
     // ************************ BULK PAYROLL ************************
@@ -132,9 +154,16 @@ class PayrollController extends Controller
             $otherDeductions = $data['other_deductions'] ?? 0;
 
             $payrollData = $this->calculatePayrollBulk($employee, $month, $allowances, $otherDeductions);
-            Payroll::create($payrollData);
-            $created++;
-        }
+            
+            $payroll = Payroll::create($payrollData);
+
+            $payroll->load('employee.user');
+
+            if ($payroll->employee && $payroll->employee->user) {
+                $payroll->employee->user->notify(new PayrollGeneratedNotification($payroll));
+            }
+                        $created++;
+                    }
 
         return redirect()->route('payrolls.index')
             ->with('success', "Payroll prepared for employees {$created} for the month {$month}");

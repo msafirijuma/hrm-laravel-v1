@@ -178,6 +178,7 @@
         </div>
 
         <div class="main-content-body p-2 w-100 mt-3 mt-md-1">
+            @include('layouts.top-navbar')
             @yield('content')
         </div>
         
