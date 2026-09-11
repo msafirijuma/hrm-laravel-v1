@@ -86,7 +86,6 @@ class PerformanceReviewController extends Controller
             'status'          => 'completed',
         ]);
 
-        // $review = PerformanceReview::create([...]);
         $review->load('employee.user');
 
         if ($review->employee && $review->employee->user) {

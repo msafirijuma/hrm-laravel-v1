@@ -2,7 +2,7 @@
 <ul class="navbar-nav ms-auto align-items-center gap-1">
 
     <!-- ===== NOTIFICATION BELL ===== -->
-    <li class="nav-item dropdown">
+    <li class="nav-item dropdown me-3">
         <a class="nav-link position-relative px-3" href="#" id="notificationDropdown"
            role="button" data-bs-toggle="dropdown" aria-expanded="false"
            style="font-size: 1.25rem;">

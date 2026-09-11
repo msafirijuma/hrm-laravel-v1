@@ -59,8 +59,6 @@ class EmployeeDocumentController extends Controller
             'notes'       => $request->notes,
         ]);
 
-        // $document = EmployeeDocument::create([...]);
-
         if ($employee->user) {
             $employee->user->notify(new DocumentUploadedNotification($document));
         }

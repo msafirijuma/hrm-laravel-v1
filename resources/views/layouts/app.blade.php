@@ -9,6 +9,15 @@
             background-color: #f8fafc;
         }
 
+        .navbar-nav {
+        display: flex;
+        justify-content: end;
+        flex-direction: row;
+        padding-left: 0;
+        margin-bottom: 10px;
+        list-style: none;
+    }
+
         .app-wrapper {
             display: flex;
             min-height: 100vh;

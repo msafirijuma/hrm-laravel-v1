@@ -6,6 +6,7 @@ use App\Models\Employee;
 use App\Models\Department;
 use App\Models\Position;
 use App\Models\User;
+use App\Notifications\EmployeeStatusChangedNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Hash;
@@ -138,7 +139,7 @@ class EmployeeController extends Controller
         }
 
         $oldStatus = $employee->status;
-        
+
         $employee->update($data);
 
         // Update Role
