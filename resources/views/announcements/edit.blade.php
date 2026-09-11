@@ -50,8 +50,8 @@
                 </div>
             </div>
 
-            <button type="submit" class="btn btn-success">Sasisha</button>
-            <a href="{{ route('announcements.index') }}" class="btn btn-secondary">Ghairi</a>
+            <button type="submit" class="btn btn-success">Update</button>
+            <a href="{{ route('announcements.index') }}" class="btn btn-secondary">Cancel</a>
         </form>
     </div>
 </div>

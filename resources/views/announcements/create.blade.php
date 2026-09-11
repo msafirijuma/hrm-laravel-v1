@@ -36,7 +36,7 @@
                 </div>
             </div>
             <button type="submit" class="btn btn-success">Publish</button>
-            <a href="{{ route('announcements.index') }}" class="btn btn-secondary">Ghairi</a>
+            <a href="{{ route('announcements.index') }}" class="btn btn-secondary">cancel</a>
         </form>
     </div>
 </div>

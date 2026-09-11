@@ -42,7 +42,7 @@ class AnnouncementController extends Controller
         ]);
 
         return redirect()->route('announcements.index')
-            ->with('success', 'Announcement imewekwa!');
+            ->with('success', 'Announcement added successfully!');
     }
 
     public function edit(Announcement $announcement)
@@ -71,14 +71,14 @@ class AnnouncementController extends Controller
         ]);
 
         return redirect()->route('announcements.index')
-            ->with('success', 'Announcement imesasishwa!');
+            ->with('success', 'Announcement updated successfully!');
     }
 
     public function destroy(Announcement $announcement)
     {
         $announcement->delete();
         return redirect()->route('announcements.index')
-            ->with('success', 'Announcement imefutwa!');
+            ->with('success', 'Announcement deleted successfully!');
     }
 
     // For all authenticated users to view
@@ -87,7 +87,7 @@ class AnnouncementController extends Controller
         $announcements = Announcement::visible()
             ->with('creator')
             ->latest('published_at')
-            ->paginate(10);
+            ->paginate(3);
 
         return view('announcements.board', compact('announcements'));
     }

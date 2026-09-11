@@ -71,30 +71,51 @@
         </div>
     </div>
 
-    <div class="row g-3 mb-4">
+    <div class="row g-3 mb-4 mt-5">
         <div class="col-12">
             <!-- Latest Announcements -->
-            <div class="card shadow-sm mb-4">
-                <div class="card-header d-flex justify-content-between align-items-center">
-                    <h5 class="mb-0">Latest Announcements</h5>
-                    <a href="{{ route('announcements.board') }}" class="btn btn-sm btn-outline-primary">View All</a>
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-header bg-white d-flex justify-content-between align-items-center py-3">
+                    <h5 class="mb-0 fw-bold">
+                        <i class="fas fa-bullhorn text-primary me-2"></i>
+                        Latest Announcements
+                    </h5>
+                    <a href="{{ route('announcements.board') }}" class="btn btn-sm btn-outline-primary rounded-pill">
+                        <i class="fas fa-eye me-2"></i> View All
+                    </a>
                 </div>
                 <div class="card-body p-0">
                     @forelse($latestAnnouncements as $item)
-                    <div class="p-3 border-bottom">
-                        <div class="d-flex justify-content-between">
-                            <strong>{{ $item->title }}</strong>
+                    <div class="p-3 border-bottom position-relative">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div class="pe-3">
+                                <h6 class="fw-semibold mb-1">{{ $item->title }}</h6>
+                                <p class="text-muted small mb-2">
+                                    {{ Str::limit($item->body, 90) }}
+                                </p>
+                                <small class="text-muted">
+                                    <i class="fas fa-clock me-1"></i>
+                                    {{ $item->published_at?->diffForHumans() }}
+                                </small>
+                            </div>
                             @if($item->priority == 'urgent')
-                                <span class="badge bg-danger">Urgent</span>
+                                <span class="badge bg-danger rounded-pill px-3 py-2">
+                                    <i class="fas fa-exclamation-circle me-1"></i> Urgent
+                                </span>
                             @elseif($item->priority == 'important')
-                                <span class="badge bg-warning text-dark">Important</span>
+                                <span class="badge bg-warning text-dark rounded-pill px-3 py-2">
+                                    <i class="fas fa-star me-1"></i> Important
+                                </span>
+                            @else
+                            <span class="badge bg-primary text-light rounded-pill px-3 py-2">Normal</span>
                             @endif
                         </div>
-                        <p class="text-muted small mb-1">{{ $item->published_at?->diffForHumans() }}</p>
-                        <p class="mb-0 small">{{ Str::limit($item->body, 100) }}</p>
                     </div>
                     @empty
-                    <div class="p-3 text-muted text-center">Hakuna announcements.</div>
+                    <div class="p-4 text-center text-muted">
+                        <i class="fas fa-inbox fa-2x mb-2 d-block opacity-50"></i>
+                        No any announcement at the moment.
+                    </div>
                     @endforelse
                 </div>
             </div>
@@ -131,14 +152,14 @@
     </div>
 
     <!-- Recent Logs -->
-    <div class="row">
+    <div class="row g-3 mt-5">
         <div class="col-12">
             <div class="card shadow-sm">
                 <div class="card-header d-flex justify-content-between align-items-center bg-primary text-light">
                     <h5 class="mb-0">
                         <i class="fas fa-history me-2"></i> Recent Logs
                     </h5>
-                    <a href="{{ route('activity-logs.index') }}" class="btn btn-sm btn-light text-primary">
+                    <a href="{{ route('activity-logs.index') }}" class="btn btn-sm btn-outline-light rounded-pill text-info">
                         <i class="fas fa-eye me-2"></i> View All
                     </a>
                 </div>
@@ -167,7 +188,7 @@
                                         </small>
                                     </td>
                                     <td>
-                                        <!-- Set badge color based on activity type -->
+                                        <!-- badge color based on activity type -->
                                         <span class="badge px-3 py-1.5 text-uppercase bg-{{ 
                                             Str::contains(strtolower($log->action), ['create', 'add']) ? 'success' : 
                                             (Str::contains(strtolower($log->action), ['update', 'edit', 'change']) ? 'warning text-dark' : 
@@ -196,7 +217,7 @@
     @include('layouts.public-holidays')
     
     <!-- Quick Actions -->
-    <div class="row mt-4">
+    <div class="row g-3 mt-5">
         <div class="col-12">
             <div class="card shadow">
                 <div class="card-header py-3 bg-dark-subtle text-dark">
@@ -207,7 +228,7 @@
                         <div class="col-6 col-md-3">
                             <a href="{{ route('payrolls.reports') }}" class="btn btn-success btn-lg w-100 py-4">
                                 <i class="fas fa-chart-bar fa-2x d-block mb-2"></i>
-                                Payroll Reports
+                                Reports
                             </a>
                         </div>
                         <div class="col-6 col-md-3">
@@ -225,7 +246,7 @@
                         <div class="col-6 col-md-3">
                             <a href="public-holidays" class="btn btn-warning btn-lg w-100 py-4">
                                 <i class="fas fa-calendar-day fa-2x d-block mb-2"></i>
-                                Public Holidays
+                                Holidays
                             </a>
                         </div>
                     </div>
