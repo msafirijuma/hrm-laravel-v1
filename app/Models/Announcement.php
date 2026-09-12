@@ -27,6 +27,23 @@ class Announcement extends Model
         return $this->belongsTo(User::class, 'created_by');
     }
 
+    public function reads()
+    {
+        return $this->hasMany(AnnouncementRead::class);
+    }
+
+    public function readers()
+    {
+        return $this->belongsToMany(User::class, 'announcement_reads')
+                    ->withPivot('read_at');
+    }
+
+    // Check if current user has read
+    public function isReadBy($userId): bool
+    {
+        return $this->reads()->where('user_id', $userId)->exists();
+    }
+
     // Scope: active & not expired
     public function scopeVisible($query)
     {

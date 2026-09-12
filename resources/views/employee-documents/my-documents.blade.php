@@ -9,47 +9,49 @@
 </div>
 
 <div class="card shadow-sm">
-    <div class="card-body p-0">
-        <table class="table table-hover mb-0">
-            <thead class="table-dark">
-                <tr>
-                    <th>Title</th>
-                    <th>Type</th>
-                    <th>File</th>
-                    <th>Uploaded</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                @forelse($documents as $doc)
-                <tr>
-                    <td>
-                        <strong>{{ $doc->title }}</strong>
-                        @if($doc->notes)
-                            <br><small class="text-muted">{{ $doc->notes }}</small>
-                        @endif
-                    </td>
-                    <td>
-                        <span class="badge bg-secondary">{{ ucfirst($doc->type) }}</span>
-                    </td>
-                    <td>{{ $doc->file_name }}</td>
-                    <td>{{ $doc->created_at->format('d M Y') }}</td>
-                    <td>
-                        <a href="{{ route('documents.download', $doc) }}" class="btn btn-sm btn-primary">
-                            <i class="fas fa-download"></i> Download
-                        </a>
-                    </td>
-                </tr>
-                @empty
-                <tr>
-                    <td colspan="5" class="text-center py-5 text-muted">
-                        <i class="fas fa-folder-open fa-2x mb-2 d-block"></i>
-                        Hakuna documents bado.
-                    </td>
-                </tr>
-                @endforelse
-            </tbody>
-        </table>
+    <div class="card-body p-4">
+        <div class="table-responsive">
+            <table class="table table-striped table-bordered table-hover mb-0">
+                <thead class="table-dark">
+                    <tr>
+                        <th style="width: 12px; min-width: 120px">Title</th>
+                        <th>Type</th>
+                        <th>File</th>
+                        <th style="width: 12px; min-width: 120px">Uploaded</th>
+                        <th style="width: 12px; min-width: 120px">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse($documents as $doc)
+                    <tr>
+                        <td>
+                            <strong>{{ $doc->title }}</strong>
+                            @if($doc->notes)
+                                <br><small class="text-muted">{{ $doc->notes }}</small>
+                            @endif
+                        </td>
+                        <td>
+                            <span class="badge bg-secondary">{{ ucfirst($doc->type) }}</span>
+                        </td>
+                        <td>{{ $doc->file_name }}</td>
+                        <td>{{ $doc->created_at->format('d M Y') }}</td>
+                        <td>
+                            <a href="{{ route('documents.download', $doc) }}" class="btn btn-sm btn-primary">
+                                <i class="fas fa-download"></i> Download
+                            </a>
+                        </td>
+                    </tr>
+                    @empty
+                    <tr>
+                        <td colspan="5" class="text-center py-5 text-muted">
+                            <i class="fas fa-folder-open fa-2x mb-2 d-block"></i>
+                            Hakuna documents bado.
+                        </td>
+                    </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
 @endsection

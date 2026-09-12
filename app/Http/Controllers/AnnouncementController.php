@@ -97,10 +97,25 @@ class AnnouncementController extends Controller
     // For all authenticated users to view
     public function board()
     {
+        $userId = auth()->id();
+
         $announcements = Announcement::visible()
-            ->with('creator')
-            ->latest('published_at')
-            ->paginate(3);
+                            ->with('creator')
+                            ->latest('published_at')
+                            ->paginate(5);
+
+        // Mark all currently visible announcements as read
+        $visibleIds = Announcement::visible()->pluck('id');
+
+        foreach ($visibleIds as $id) {
+            \App\Models\AnnouncementRead::firstOrCreate(
+                [
+                    'user_id' => $userId,
+                    'announcement_id' => $id,
+                ],
+                ['read_at' => now()]
+            );
+        }
 
         return view('announcements.board', compact('announcements'));
     }

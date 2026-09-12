@@ -198,13 +198,13 @@
                     </a>
                 </div>
                 <div class="col-12 col-md-3">
-                    <a href="{{ route('password.change') }}" class="btn btn-info btn-lg w-100 py-4">
-                        <i class="fas fa-file-invoice fa-2x d-block mb-2"></i>
-                            Change Password
+                    <a href="{{ route('my.documents') }}" class="btn btn-info btn-lg text-light w-100 py-4">
+                        <i class="fas fa-folder fa-2x d-block mb-2"></i>
+                            Document
                     </a>
                 </div>
                 <div class="col-12 col-md-3">
-                    <a href="{{ route('my-payslips') }}" class="btn btn-warning btn-lg w-100 py-4">
+                    <a href="{{ route('my-payslips') }}" class="btn btn-warning btn-lg text-light w-100 py-4">
                         <i class="fas fa-key fa-2x d-block mb-2"></i>
                         My Payslips
                     </a>

@@ -127,13 +127,12 @@
             <a href="{{ route('announcements.board') }}" class="nav-link d-flex align-items-center @if (Str::contains(Route::currentRouteName(), 'announcements.board')) active @endif">
                 <i class="fas fa-bullhorn me-3"></i> Announcement Board
                 @php
-                    $pendingAnnouncements = App\Models\Announcement::visible()
-                    ->with('creator')
-                    ->count()
+                    $unreadCount = \App\Models\Announcement::visible()
+                        ->whereDoesntHave('reads', fn($q) => $q->where('user_id', auth()->id()))
+                        ->count();
                 @endphp
-                
-                @if($pendingAnnouncements > 0)
-                    <span class="badge rounded-pill bg-danger px-2 py-1 small fw-bold">{{ $pendingAnnouncements }}</span>
+                @if($unreadCount > 0)
+                    <span class="badge bg-danger rounded-pill">{{ $unreadCount }}</span>
                 @endif
             </a>
         </li>

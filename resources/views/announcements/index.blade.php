@@ -3,7 +3,7 @@
 @section('title', 'Announcements')
 
 @section('content')
-<div class="d-flex justify-content-between align-items-center mb-4">
+<div class="d-flex justify-content-between align-announcements-center mb-4">
     <h2>Company Announcements</h2>
     <a href="{{ route('announcements.create') }}" class="btn btn-primary">
         <i class="fas fa-plus"></i> New Announcement
@@ -30,10 +30,13 @@
                     <tr>
                         <td><strong>{{ $announcement->title }}</strong></td>
                         <td>
-                            <strong>{{ $announcement->creator->name ?? 'HR' }}</strong>
-                            <small class="text-muted d-block" style="font-size: 11px;">
-                                    {{ $announcement->user ? ($announcement->user->getRoleNames()->first() ?? 'User') : '—' }}
+                            <div>{{ $announcement->creator->name ?? '—' }}</div>
+                            @if($announcement->creator && $announcement->creator->roles->isNotEmpty())
+                                @php $role = $announcement->creator->roles->first()->name; @endphp
+                                <small class="badge bg-{{ $role === 'Super Admin' ? 'dark' : ($role === 'HR' ? 'info' : 'secondary') }} mt-1">
+                                    {{ $role }}
                                 </small>
+                            @endif
                         </td>
                         <td>
                             @if($announcement->priority == 'urgent')
