@@ -17,12 +17,12 @@
                     <thead class="table-dark">
                         <tr>
                             <th>#</th>
-                            <th>Leave ype</th>
-                            <th>Leave Period</th>
+                            <th style="width: 120px; min-width: 120px;">Leave type</th>
+                            <th style="width: 120px; min-width: 120px;">Leave Period</th>
                             <th>Days</th>
                             <th>Reason</th>
                             <th>Status</th>
-                            <th>Actions</th>
+                            <th style="width: 120px; min-width: 120px;">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -54,12 +54,12 @@
 
                                     <!-- Edit Button -->
                                     <button type="button" onclick="confirmEdit({{ $leave->id }})" class="btn btn-sm btn-warning">
-                                        <i class="fas fa-edit"></i> Edit
+                                        <i class="fas fa-edit"></i> 
                                     </button>
                                     
                                     <!-- Cancel Button -->
                                     <button type="button" onclick="cancelLeave({{ $leave->id }})" class="btn btn-sm btn-danger">
-                                        <i class="fas fa-trash"></i> Cancel
+                                        <i class="fas fa-trash"></i>
                                     </button>
                                 @else
                                     <span class="text-muted">—</span>

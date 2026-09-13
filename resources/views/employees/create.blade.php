@@ -14,13 +14,13 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <label>First Name <span class="text-danger">*</span></label>
+                                <label class="form-label">First Name <span class="text-danger">*</span></label>
                                 <input type="text" name="first_name" class="form-control" required>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <label>Last Name <span class="text-danger">*</span></label>
+                                <label class="form-label">Last Name <span class="text-danger">*</span></label>
                                 <input type="text" name="last_name" class="form-control" required>
                             </div>
                         </div>
@@ -29,13 +29,13 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <label>Email <span class="text-danger">*</span></label>
+                                <label class="form-label">Email <span class="text-danger">*</span></label>
                                 <input type="email" name="email" class="form-control" required>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <label>Phone <span class="text-danger">*</span></label>
+                                <label class="form-label">Phone <span class="text-danger">*</span></label>
                                 <input type="text" name="phone" class="form-control" required>
                             </div>
                         </div>
@@ -44,13 +44,13 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <label>Hired Date <span class="text-danger">*</span></label>
+                                <label class="form-label">Hired Date <span class="text-danger">*</span></label>
                                 <input type="date" name="date_hired" class="form-control" required>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <label>Contract End Date</label>
+                                <label class="form-label">Contract End Date</label>
                                 <input type="date" name="contract_end_date" class="form-control">
                             </div>
                         </div>
@@ -59,7 +59,7 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <label>Department <span class="text-danger">*</span></label>
+                                <label class="form-label">Department <span class="text-danger">*</span></label>
                                 <select name="department_id" class="form-control" required>
                                     <option value="">-- Choose Department --</option>
                                     @foreach($departments as $dept)
@@ -70,7 +70,7 @@
                         </div>
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <label>Position <span class="text-danger">*</span></label>
+                                <label class="form-label">Position <span class="text-danger">*</span></label>
                                 <select name="position_id" class="form-control" required>
                                     <option value="">-- Choose Position --</option>
                                     @foreach($positions as $pos)
@@ -84,7 +84,7 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <label>Gender <span class="text-danger">*</span></label>
+                                <label class="form-label">Gender <span class="text-danger">*</span></label>
                                 <select name="gender" class="form-control" required>
                                     <option value="">-- Choose --</option>
                                     <option value="Male">Male</option>
@@ -94,17 +94,17 @@
                         </div>
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <label>Basic Salary (TZS) <span class="text-danger">*</span></label></label>
+                                <label class="form-label">Basic Salary (TZS) <span class="text-danger">*</span></label></label>
                                 <input type="number" name="basic_salary" class="form-control" step="0.01" required>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Role Selection -->
+                    <!-- Role & birth date -->
                     <div class="row">
-                        <div class="col-md-4">
+                        <div class="col-md-6">
                             <div class="mb-3">
-                                <label>Role <span class="text-danger">*</span></label>
+                                <label class="form-label">Role <span class="text-danger">*</span></label>
                                 <select name="role" class="form-control" required>
                                     <option value="">-- Choose Role --</option>
                                     @foreach($roles as $role)
@@ -113,7 +113,24 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">Date of Birth <span class="text-muted">(Optional)</span></label>
+                                <input type="date" name="date_of_birth" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Photo Upload -->
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-4">
+                                <label class="form-label">Employee's Photo <span class="text-muted">(Optional)</span></label>
+                                <input type="file" name="photo" class="form-control" accept="image/*">
+                                <small class="text-muted">JPG, JPEG, PNG (Max 2MB)</small>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
                             <div class="mb-3">
                                 <label class="form-label">Status <span class="text-danger">*</span></label>
                                 <select name="status" class="form-select" required>
@@ -129,19 +146,6 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="col-md-4">
-                            <div class="mb-3">
-                                <label>Date of Birth <span class="text-muted">(Optional)</span></label>
-                                <input type="date" name="date_of_birth" class="form-control">
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Photo Upload -->
-                    <div class="mb-4">
-                        <label>Employee's Photo <span class="text-muted">(Optional)</span></label>
-                        <input type="file" name="photo" class="form-control" accept="image/*">
-                        <small class="text-muted">JPG, JPEG, PNG (Max 2MB)</small>
                     </div>
 
                     <div class="mt-4">

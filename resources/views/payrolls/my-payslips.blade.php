@@ -16,7 +16,7 @@
                                 <th>Basic Salary</th>
                                 <th>Gross Salary</th>
                                 <th>Net Salary</th>
-                                <th>Action</th>
+                                <th style="width: 120px; min-width: 120px">Action</th>
                             </tr>
                         </thead>
                         <tbody>

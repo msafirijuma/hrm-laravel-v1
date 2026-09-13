@@ -27,7 +27,7 @@ class DocumentUploadedNotification extends Notification
             ->greeting('Hello ' . $notifiable->name . ',')
             ->line("Document has been added to your profile: {$this->document->title}")
             ->action('View Documents', url('/my-documents'))
-            ->line('Asante.');
+            ->line('Thanks.');
     }
 
     public function toArray(object $notifiable): array

@@ -4,9 +4,9 @@
 
 @section('content')
 <div class="d-flex justify-content-between align-items-center mb-4">
-    <h2 class="fw-bold">Attendance Overview</h2>
+    <h2 class="fw-bold">Attendance <span class="d-none d-md-inline">Overview</span></h2>
     <a href="{{ route('attendance.mark') }}" class="btn btn-primary">
-        <i class="fas fa-plus"></i> Mark Attendance
+        <i class="fas fa-plus"></i> Mark <span class="d-none d-md-inline">Attendance</span>
     </a>
 </div>
 
@@ -15,11 +15,11 @@
     <div class="card-body">
         <form method="GET" action="{{ route('hr.attendance') }}" class="row g-3">
             <div class="col-md-4">
-                <label class="form-label">Tarehe</label>
+                <label class="form-label">Date</label>
                 <input type="date" name="date" class="form-control" value="{{ $date }}">
             </div>
             <div class="col-md-4">
-                <label class="form-label">Idara</label>
+                <label class="form-label">Department</label>
                 <select name="department_id" class="form-select">
                     <option value="">-- All Departments --</option>
                     @foreach($departments as $dept)
@@ -92,55 +92,57 @@
 <!-- Table -->
 <div class="card shadow-sm">
     <div class="card-header">
-        <h5 class="mb-0">Attendance – {{ \Carbon\Carbon::parse($date)->format('d M Y') }}</h5>
+        <h5 class="mb-0">Attendance - {{ \Carbon\Carbon::parse($date)->format('d M Y') }}</h5>
     </div>
     <div class="card-body p-0">
-        <table class="table table-hover mb-0">
-            <thead class="table-dark">
-                <tr>
-                    <th>#</th>
-                    <th>Mfanyakazi</th>
-                    <th>Idara</th>
-                    <th>Status</th>
-                    <th>Check In</th>
-                    <th>Check Out</th>
-                    <th>Notes</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach($employees as $emp)
-                @php $att = $attendances->get($emp->id); @endphp
-                <tr>
-                    <td>{{ $loop->iteration }}</td>
-                    <td>
-                        <strong>{{ $emp->first_name }} {{ $emp->last_name }}</strong><br>
-                        <small class="text-muted">{{ $emp->employee_number }}</small>
-                    </td>
-                    <td>{{ $emp->department->name ?? '-' }}</td>
-                    <td>
-                        @if($att)
-                            @if($att->status == 'present')
-                                <span class="badge bg-success">Present</span>
-                            @elseif($att->status == 'late')
-                                <span class="badge bg-warning text-dark">Late</span>
-                            @elseif($att->status == 'absent')
-                                <span class="badge bg-danger">Absent</span>
-                            @elseif($att->status == 'half_day')
-                                <span class="badge bg-info">Half Day</span>
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped table-hover mb-0" id="employeeTable">
+                <thead class="table-dark">
+                    <tr>
+                        <th>#</th>
+                        <th>Employee</th>
+                        <th>Department</th>
+                        <th>Status</th>
+                        <th>Check In</th>
+                        <th>Check Out</th>
+                        <th>Notes</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($employees as $emp)
+                    @php $att = $attendances->get($emp->id); @endphp
+                    <tr>
+                        <td>{{ $loop->iteration }}</td>
+                        <td>
+                            <strong>{{ $emp->first_name }} {{ $emp->last_name }}</strong><br>
+                            <small class="text-muted">{{ $emp->employee_number }}</small>
+                        </td>
+                        <td>{{ $emp->department->name ?? '-' }}</td>
+                        <td>
+                            @if($att)
+                                @if($att->status == 'present')
+                                    <span class="badge bg-success">Present</span>
+                                @elseif($att->status == 'late')
+                                    <span class="badge bg-warning text-dark">Late</span>
+                                @elseif($att->status == 'absent')
+                                    <span class="badge bg-danger">Absent</span>
+                                @elseif($att->status == 'half_day')
+                                    <span class="badge bg-info">Half Day</span>
+                                @else
+                                    <span class="badge bg-secondary">On Leave</span>
+                                @endif
                             @else
-                                <span class="badge bg-secondary">On Leave</span>
+                                <span class="badge bg-light text-dark border">Not Marked</span>
                             @endif
-                        @else
-                            <span class="badge bg-light text-dark border">Not Marked</span>
-                        @endif
-                    </td>
-                    <td>{{ $att?->check_in ? \Carbon\Carbon::parse($att->check_in)->format('H:i') : '—' }}</td>
-                    <td>{{ $att?->check_out ? \Carbon\Carbon::parse($att->check_out)->format('H:i') : '—' }}</td>
-                    <td>{{ $att?->notes ?? '—' }}</td>
-                </tr>
-                @endforeach
-            </tbody>
-        </table>
+                        </td>
+                        <td>{{ $att?->check_in ? \Carbon\Carbon::parse($att->check_in)->format('H:i') : '—' }}</td>
+                        <td>{{ $att?->check_out ? \Carbon\Carbon::parse($att->check_out)->format('H:i') : '—' }}</td>
+                        <td>{{ $att?->notes ?? '—' }}</td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
 @endsection

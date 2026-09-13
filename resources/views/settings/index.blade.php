@@ -18,9 +18,6 @@
                     <a href="#general" class="nav-link settings-tab active" data-target="general">
                         <i class="fas fa-cog me-2"></i> General
                     </a>
-                    <a href="#notifications" class="nav-link settings-tab" data-target="notifications">
-                        <i class="fas fa-bell me-2"></i> Notifications
-                    </a>
                     <a href="#security" class="nav-link settings-tab" data-target="security">
                         <i class="fas fa-shield-alt me-2"></i> Security
                     </a>
@@ -122,35 +119,6 @@
                             </div>
                         </div>
 
-                        <button type="submit" class="btn btn-primary">
-                            <i class="fas fa-save me-1"></i> Save
-                        </button>
-                    </form>
-                </div>
-            </div>
-        </div>
-
-        <!-- NOTIFICATIONS -->
-        <div class="settings-panel d-none" id="panel-notifications">
-            <div class="card border-0">
-                <div class="card-body p-4">
-                    <h5 class="fw-bold mb-4">Notification Preferences</h5>
-                    <form action="{{ route('settings.notifications') }}" method="POST">
-                        @csrf
-                        <div class="form-check mb-3">
-                            <input type="checkbox" name="notify_new_user" value="1" class="form-check-input"
-                                   id="notify_new_user" {{ $settings['notify_new_user'] == '1' ? 'checked' : '' }}>
-                            <label class="form-check-label" for="notify_new_user">
-                                Email alert when a new user registers
-                            </label>
-                        </div>
-                        <div class="form-check mb-4">
-                            <input type="checkbox" name="notify_new_sub" value="1" class="form-check-input"
-                                   id="notify_new_sub" {{ $settings['notify_new_sub'] == '1' ? 'checked' : '' }}>
-                            <label class="form-check-label" for="notify_new_sub">
-                                Email alert when a new subscription is made
-                            </label>
-                        </div>
                         <button type="submit" class="btn btn-primary">
                             <i class="fas fa-save me-1"></i> Save
                         </button>

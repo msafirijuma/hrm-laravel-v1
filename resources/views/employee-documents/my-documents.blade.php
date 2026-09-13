@@ -5,20 +5,20 @@
 @section('content')
 <div class="d-flex justify-content-between align-items-center mb-4">
     <h2 class="fw-bold">My Documents</h2>
-    <a href="{{ route('dashboard') }}" class="btn btn-secondary">← Rudi Dashboard</a>
+    <a href="{{ route('dashboard') }}" class="btn btn-secondary">← Back</a>
 </div>
 
 <div class="card shadow-sm">
     <div class="card-body p-4">
         <div class="table-responsive">
-            <table class="table table-striped table-bordered table-hover mb-0">
+            <table class="table table-striped table-bordered table-hover mb-0" id="employeeTable">
                 <thead class="table-dark">
                     <tr>
-                        <th style="width: 12px; min-width: 120px">Title</th>
+                        <th style="width: 120px; min-width: 120px">Title</th>
                         <th>Type</th>
                         <th>File</th>
-                        <th style="width: 12px; min-width: 120px">Uploaded</th>
-                        <th style="width: 12px; min-width: 120px">Action</th>
+                        <th style="width: 120px; min-width: 120px">Uploaded</th>
+                        <th style="width: 120px; min-width: 120px">Action</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -45,7 +45,7 @@
                     <tr>
                         <td colspan="5" class="text-center py-5 text-muted">
                             <i class="fas fa-folder-open fa-2x mb-2 d-block"></i>
-                            Hakuna documents bado.
+                            No any documents yet.
                         </td>
                     </tr>
                     @endforelse

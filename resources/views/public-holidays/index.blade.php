@@ -3,7 +3,7 @@
 @section('title', 'Public Holidays')
 
 @section('content')
-<div class="d-flex justify-content-between align-items-center mb-4">
+<div class="d-md-flex justify-content-between align-items-center mb-4">
     <h2>Public Holidays</h2>
     <div>
         <a href="{{ route('public-holidays.calendar') }}" class="btn btn-info me-2">
@@ -22,9 +22,9 @@
                 <thead class="table-dark">
                     <tr>
                         <th>Name</th>
-                        <th>Date</th>
+                        <th style="width: 120px; min-width: 120px">Date</th>
                         <th>Recurring</th>
-                        <th>Actions</th>
+                        <th style="width: 120px; min-width: 120px">Actions</th>
                     </tr>
                 </thead>
                 <tbody>

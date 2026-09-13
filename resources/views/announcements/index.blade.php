@@ -4,9 +4,9 @@
 
 @section('content')
 <div class="d-flex justify-content-between align-announcements-center mb-4">
-    <h2>Company Announcements</h2>
+    <h2>Announcements</h2>
     <a href="{{ route('announcements.create') }}" class="btn btn-primary">
-        <i class="fas fa-plus"></i> New Announcement
+        <i class="fas fa-plus"></i> New <span class="d-none d-md-inline">Announcement</span>
     </a>
 </div>
 

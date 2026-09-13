@@ -213,7 +213,7 @@
             <span class="text-uppercase text-muted fw-bold small tracking-wider px-3">Personal</span>
         </li>
         <li class="nav-item mb-1">
-            <a href="{{ route('my-payslips') }}" class="nav-link d-flex align-items-center @if (Route::currentRouteName() == '') active @endif">
+            <a href="{{ route('my-payslips') }}" class="nav-link d-flex align-items-center @if (Route::currentRouteName() == 'my-payslips') active @endif">
                 <i class="fas fa-file-invoice me-3"></i> My Payslips
             </a>
         </li>

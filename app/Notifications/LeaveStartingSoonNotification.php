@@ -26,7 +26,7 @@ class LeaveStartingSoonNotification extends Notification
         return (new MailMessage)
             ->subject('Leave Starting Soon')
             ->greeting('Hello ' . $notifiable->name . ',')
-            ->line("Leave of {$emp->first_name} {$emp->last_name} inaanza tarehe " . $this->leaveRequest->start_date->format('d M Y') . ".")
+            ->line("Leave of {$emp->first_name} {$emp->last_name} starting on " . $this->leaveRequest->start_date->format('d M Y') . ".")
             ->line('Days: ' . $this->leaveRequest->days_requested)
             ->action('View', url('/my-leaves'))
             ->line('Thanks.');
@@ -38,7 +38,7 @@ class LeaveStartingSoonNotification extends Notification
         return [
             'type'    => 'leave_starting_soon',
             'title'   => 'Leave Starting Soon',
-            'message' => "Leave of {$emp->first_name} starting " . $this->leaveRequest->start_date->format('d M Y'),
+            'message' => "Leave of {$emp->first_name} starting on " . $this->leaveRequest->start_date->format('d M Y'),
             'url'     => url('/my-leaves'),
         ];
     }

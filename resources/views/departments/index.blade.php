@@ -17,11 +17,11 @@
                     <thead class="table-dark">
                         <tr>
                             <th>#</th>
-                            <th>Name of Department</th>
+                            <th>Department</th>
                             <th>Code</th>
-                            <th>Description</th>
+                            <th style="width: 120px; min-width: 120px">Description</th>
                             <th>Employees</th>
-                            <th>Actions</th>
+                            <th style="width: 120px; min-width: 120px">Actions</th>
                         </tr>
                     </thead>
                     <tbody>

@@ -20,9 +20,9 @@
                             <th>Department</th>
                             <th>Period</th>
                             <th>Rating</th>
-                            <th style="min-width: 120px;">Reviewed By</th>
-                            <th style="min-width: 120px;">Date</th>
-                            <th>Actions</th>
+                            <th style="width: 120px; min-width: 120px">Reviewed By</th>
+                            <th style="width: 120px; min-width: 120px">Date</th>
+                            <th style="width: 100px; min-width: 100px">Actions</th>
                         </tr>
                     </thead>
                     <tbody>

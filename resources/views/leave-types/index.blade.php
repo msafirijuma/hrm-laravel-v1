@@ -21,7 +21,7 @@
                             <th style="min-width: 120px;">Maximum Days Per Year</th>
                             <th>Paid?</th>
                             <th style="min-width: 120px;">Description</th>
-                            <th>Actions</th>
+                            <th style="width: 120px; min-width: 120px">Actions</th>
                         </tr>
                     </thead>
                     <tbody>

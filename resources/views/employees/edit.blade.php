@@ -15,14 +15,14 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <label>First Name <span class="text-danger">*</span></label>
+                                <label class="form-label">First Name <span class="text-danger">*</span></label>
                                 <input type="text" name="first_name" class="form-control" 
                                        value="{{ old('first_name', $employee->first_name) }}" required>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <label>Last Name <span class="text-danger">*</span></label>
+                                <label class="form-label">Last Name <span class="text-danger">*</span></label>
                                 <input type="text" name="last_name" class="form-control" 
                                        value="{{ old('last_name', $employee->last_name) }}" required>
                             </div>
@@ -32,14 +32,14 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <label>Email <span class="text-danger">*</span></label>
+                                <label class="form-label">Email <span class="text-danger">*</span></label>
                                 <input type="email" name="email" class="form-control" 
                                        value="{{ old('email', $employee->email) }}" required>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <label>Phone <span class="text-danger">*</span></label>
+                                <label class="form-label">Phone <span class="text-danger">*</span></label>
                                 <input type="text" name="phone" class="form-control" 
                                        value="{{ old('phone', $employee->phone) }}" required>
                             </div>
@@ -49,14 +49,14 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <label>Hired Date <span class="text-danger">*</span></label>
+                                <label class="form-label">Hired Date <span class="text-danger">*</span></label>
                                 <input type="date" name="date_hired" class="form-control" 
                                        value="{{ old('date_hired', $employee->date_hired?->format('Y-m-d')) }}" required>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <label>Contract End Date</label>
+                                <label class="form-label">Contract End Date</label>
                                 <input type="date" name="contract_end_date" class="form-control"
                                     value="{{ old('contract_end_date', $employee->contract_end_date?->format('Y-m-d') ?? '') }}">
                             </div>
@@ -66,7 +66,7 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <label>Department <span class="text-danger">*</span></label>
+                                <label class="form-label">Department <span class="text-danger">*</span></label>
                                 <select name="department_id" class="form-control" required>
                                     <option value="">-- Choose Department --</option>
                                     @foreach($departments as $dept)
@@ -79,7 +79,7 @@
                         </div>
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <label>Position <span class="text-danger">*</span></label>
+                                <label class="form-label">Position <span class="text-danger">*</span></label>
                                 <select name="position_id" class="form-control" required>
                                     <option value="">-- Choose Department  --</option>
                                     @foreach($positions as $pos)
@@ -95,7 +95,7 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <label>Gender <span class="text-danger">*</span></label>
+                                <label class="form-label">Gender <span class="text-danger">*</span></label>
                                 <select name="gender" class="form-control" required>
                                     <option value="Male" {{ $employee->gender == 'Male' ? 'selected' : '' }}>Male</option>
                                     <option value="Female" {{ $employee->gender == 'Female' ? 'selected' : '' }}>Female</option>
@@ -104,7 +104,7 @@
                         </div>
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <label>Basic Salary (TZS)</label>
+                                <label class="form-label">Basic Salary (TZS)</label>
                                 <input type="number" name="basic_salary" class="form-control" step="0.01"
                                        value="{{ old('basic_salary', $employee->basic_salary) }}">
                             </div>
@@ -113,9 +113,9 @@
 
                     <!-- Role Selection -->
                     <div class="row">
-                        <div class="col-md-4">
+                        <div class="col-md-6">
                             <div class="mb-3">
-                                <label>Role <span class="text-danger">*</span></label>
+                                <label class="form-label">Role <span class="text-danger">*</span></label>
                                 <select name="role" class="form-control" required>
                                     @foreach($roles as $role)
                                         <option value="{{ $role->name }}" 
@@ -126,7 +126,18 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">Date of Birth <span class="text-muted">(Optional)</span></label>
+                                <input type="date" name="date_of_birth" class="form-control" 
+                                    value="{{ old('date_of_birth', $employee->date_of_birth?->format('Y-m-d')) }}">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Status -->
+                    <div class="row">
+                        <div class="col-md-6">
                             <div class="mb-3">
                                 <label class="form-label">Status <span class="text-danger">*</span></label>
                                 <select name="status" class="form-select" required>
@@ -141,23 +152,18 @@
                                     </option>
                                 </select>
                             </div>
-                            <div class="mb-3">
-                                <label>Reason for Status Change (Optional)</label>
-                                <input type="text" name="status_reason" class="form-control" placeholder="e.g. End of contract, Resignation...">
-                            </div>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-6">
                             <div class="mb-3">
-                                <label>Date of Birth <span class="text-muted">(Optional)</span></label>
-                                <input type="date" name="date_of_birth" class="form-control" 
-                                    value="{{ old('date_of_birth', $employee->date_of_birth?->format('Y-m-d')) }}">
+                                <label class="form-label">Reason for Status Change (Optional)</label>
+                                <input type="text" name="status_reason" class="form-control" placeholder="e.g. End of contract, Resignation...">
                             </div>
                         </div>
                     </div>
 
                     <!-- Photo Upload -->
                     <div class="mb-4">
-                        <label>New Image (Optional)</label>
+                        <label class="form-label">New Image (Optional)</label>
                         <input type="file" name="photo" class="form-control" accept="image/*">
                         
                         @if($employee->photo)

@@ -46,7 +46,7 @@
                 <h2 class="fw-bold mb-1 {{ $textColor }}">
                     {{ $balance['remaining'] }}
                 </h2>
-                <p class="text-muted small mb-3">days remaining</p>
+                <p class="text-muted small mb-3">{{ $balance['remaining'] <= 1 ? " day" : " days" }} remaining</p>
 
                 <!-- Progress Bar -->
                 <div class="progress mb-2" style="height: 8px; border-radius: 10px;">
@@ -56,7 +56,7 @@
                 </div>
 
                 <div class="d-flex justify-content-between small text-muted">
-                    <span>Used: <strong>{{ $balance['used'] }}</strong></span>
+                    <span>Used: <strong>{{ ($balance['used'] <= 1) ? $balance['used'] . " day" : $balance['used'] . " days" }}</strong></span>
                     <span>{{ $percent }}%</span>
                 </div>
             </div>

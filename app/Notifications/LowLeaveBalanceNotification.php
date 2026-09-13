@@ -36,7 +36,7 @@ class LowLeaveBalanceNotification extends Notification
         return [
             'type'    => 'low_leave_balance',
             'title'   => 'Low Leave Balance',
-            'message' => "{$this->leaveTypeName}: {$this->remaining} days remain.",
+            'message' => "{$this->leaveTypeName}: you are remained with {$this->remaining} days only.",
             'url'     => url('/'),
         ];
     }
