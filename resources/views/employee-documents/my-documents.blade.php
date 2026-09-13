@@ -43,9 +43,9 @@
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="5" class="text-center py-5 text-muted">
+                        <td colspan="6" class="text-center py-5 text-muted">
                             <i class="fas fa-folder-open fa-2x mb-2 d-block"></i>
-                            No any documents yet.
+                            No any document yet.
                         </td>
                     </tr>
                     @endforelse

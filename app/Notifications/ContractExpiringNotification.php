@@ -35,9 +35,9 @@ class ContractExpiringNotification extends Notification
     {
         return [
             'type'    => 'contract_expiring',
-            'title'   => 'CContract Is Ending Soon',
+            'title'   => 'Contract Is Ending Soon',
             'message' => "{$this->employee->first_name} {$this->employee->last_name} - {$this->daysLeft} days remain.",
-            'url'     => url('/employees/' . $this->employee->id),
+            'url'     => route('employees.show', $this->employee->id),
         ];
     }
 }

@@ -39,7 +39,7 @@ class NewAnnouncementNotification extends Notification
             'message'         => $this->announcement->title,
             'announcement_id' => $this->announcement->id,
             'priority'        => $this->announcement->priority,
-            'url'             => url('/announcement-board'),
+            'url'             => route('announcements.board'),
         ];
     }
 }

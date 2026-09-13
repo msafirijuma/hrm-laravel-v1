@@ -40,7 +40,7 @@ class EmployeeStatusChangedNotification extends Notification
             'type'    => 'status_changed',
             'title'   => 'Status Changed',
             'message' => "{$this->employee->first_name} {$this->employee->last_name}: {$this->oldStatus} → {$this->newStatus}",
-            'url'     => url('/employees/' . $this->employee->id),
+            'url'     => route('employees.show', $this->employee->id),
         ];
     }
 }

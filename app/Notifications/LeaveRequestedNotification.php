@@ -46,7 +46,7 @@ class LeaveRequestedNotification extends Notification
             'title'            => 'New Leave Request',
             'message'          => "{$employee->first_name} {$employee->last_name} requested a leave for a period of ({$this->leaveRequest->days_requested} days).",
             'leave_request_id' => $this->leaveRequest->id,
-            'url'              => url('/leave-requests/pending'),
+            'url' => route('leave-requests.pending'),
         ];
     }
 }

@@ -50,7 +50,7 @@
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="5" class="text-center py-4">No any document yet.</td>
+                        <td colspan="6" class="text-center py-4">No any document yet.</td>
                     </tr>
                     @endforelse
                 </tbody>

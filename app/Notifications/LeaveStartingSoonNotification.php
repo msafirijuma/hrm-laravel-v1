@@ -39,7 +39,7 @@ class LeaveStartingSoonNotification extends Notification
             'type'    => 'leave_starting_soon',
             'title'   => 'Leave Starting Soon',
             'message' => "Leave of {$emp->first_name} starting on " . $this->leaveRequest->start_date->format('d M Y'),
-            'url'     => url('/my-leaves'),
+            'url'     => route('my-leaves'),
         ];
     }
 }

@@ -28,7 +28,7 @@ class PerformanceReviewNotification extends Notification
             ->line("Your performance review of {$this->review->period} generated.")
             ->line('Rating: ' . $this->review->rating . '/5')
             ->action('View Review', url('/performance-reviews/' . $this->review->id))
-            ->line('Ahsate.');
+            ->line('Thanks.');
     }
 
     public function toArray(object $notifiable): array
@@ -37,7 +37,7 @@ class PerformanceReviewNotification extends Notification
             'type'    => 'performance_review',
             'title'   => 'Performance Review',
             'message' => "Your performance review of {$this->review->period} generated (Rating: {$this->review->rating}/5).",
-            'url'     => url('/performance-reviews/' . $this->review->id),
+            'url'     => route('performance-reviews.show', $this->employee->id),
         ];
     }
 }

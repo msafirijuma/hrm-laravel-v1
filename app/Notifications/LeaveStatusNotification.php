@@ -53,7 +53,7 @@ class LeaveStatusNotification extends Notification
                                     : 'Your leave was ejected.',
             'leave_request_id' => $this->leaveRequest->id,
             'status'           => $status,
-            'url'              => url('/my-leaves'),
+            'url'              => route('my-leaves'),
         ];
     }
 }

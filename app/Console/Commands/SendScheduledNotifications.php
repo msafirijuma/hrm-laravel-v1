@@ -5,11 +5,14 @@ namespace App\Console\Commands;
 use App\Models\Employee;
 use App\Models\LeaveRequest;
 use App\Models\LeaveType;
+use App\Models\PublicHoliday;
 use App\Models\User;
 use App\Notifications\BirthdayNotification;
 use App\Notifications\ContractExpiringNotification;
 use App\Notifications\LeaveStartingSoonNotification;
 use App\Notifications\LowLeaveBalanceNotification;
+use App\Notifications\PublicHolidayReminderNotification;
+use App\Notifications\PublicHolidayGreetingNotification;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Notification;
 
@@ -26,6 +29,7 @@ class SendScheduledNotifications extends Command
         $this->notifyLeaveStartingSoon();
         $this->notifyLowLeaveBalance();
         $this->notifyBirthdays();
+        $this->notifyPublicHolidays();
 
         $this->info('Done.');
         return Command::SUCCESS;
@@ -108,20 +112,42 @@ class SendScheduledNotifications extends Command
 
     protected function notifyBirthdays()
     {
-        // Requires birth_date column on employees
-        if (!\Schema::hasColumn('employees', 'birth_date')) {
+        // date_of_birth column on employees
+        if (!\Schema::hasColumn('employees', 'date_of_birth')) {
             return;
         }
 
         $hrUsers = User::role(['Super Admin', 'HR'])->get();
 
         $employees = Employee::where('status', 'active')
-            ->whereMonth('birth_date', now()->month)
-            ->whereDay('birth_date', now()->day)
+            ->whereMonth('date_of_birth', now()->month)
+            ->whereDay('date_of_birth', now()->day)
             ->get();
 
         foreach ($employees as $employee) {
             Notification::send($hrUsers, new BirthdayNotification($employee));
+        }
+    }
+
+    protected function notifyPublicHolidays()
+    {
+        // active employees only
+        $users = User::whereHas('employee', function ($q) {
+            $q->where('status', 'active');
+        })->get();
+
+        // ===== holiday (reminder) =====
+        $tomorrowHolidays = PublicHoliday::whereDate('date', now()->addDay()->toDateString())->get();
+
+        foreach ($tomorrowHolidays as $holiday) {
+            Notification::send($users, new PublicHolidayReminderNotification($holiday));
+        }
+
+        // ===== holiday (greeting) =====
+        $todayHolidays = PublicHoliday::whereDate('date', now()->toDateString())->get();
+
+        foreach ($todayHolidays as $holiday) {
+            Notification::send($users, new PublicHolidayGreetingNotification($holiday));
         }
     }
 }

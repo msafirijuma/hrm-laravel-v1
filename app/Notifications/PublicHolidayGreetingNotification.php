@@ -2,16 +2,16 @@
 
 namespace App\Notifications;
 
-use App\Models\Employee;
+use App\Models\PublicHoliday;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class BirthdayNotification extends Notification
+class PublicHolidayGreetingNotification extends Notification
 {
     use Queueable;
 
-    public function __construct(public Employee $employee)
+    public function __construct(public PublicHoliday $holiday)
     {
     }
 
@@ -23,20 +23,21 @@ class BirthdayNotification extends Notification
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-            ->subject('Birthday Today')
+            ->subject('Happy – ' . $this->holiday->name)
             ->greeting('Hello ' . $notifiable->name . ',')
-            ->line("Today is the birthday of {$this->employee->first_name} {$this->employee->last_name}.")
-            ->line('Send congrats!')
+            ->line("Today is **{$this->holiday->name}**.")
+            ->line('We wish you a happy holiday!')
+            ->line('Have a good rest.')
             ->line('Thanks.');
     }
 
     public function toArray(object $notifiable): array
     {
         return [
-            'type'    => 'birthday',
-            'title'   => 'Birthday Today',
-            'message' => "Today is the birthday of {$this->employee->first_name} {$this->employee->last_name}.",
-            'url'     => route('employees.show', $this->employee->id),
+            'type'    => 'holiday_greeting',
+            'title'   => 'Happy Holiday!',
+            'message' => "Today is {$this->holiday->name}. We wish you a happy holiday!",
+            'url'     => route('dashboard'),
         ];
     }
 }

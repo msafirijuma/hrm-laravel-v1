@@ -38,7 +38,7 @@ class PayrollGeneratedNotification extends Notification
             'title'      => 'This Month Payslip',
             'message'    => "Your Payslip of {$this->payroll->month} generated (TZS " . number_format($this->payroll->net_salary, 0) . ").",
             'payroll_id' => $this->payroll->id,
-            'url'        => url('/my-payslips/' . $this->payroll->id),
+            'url'        => route('my.payslips'),
         ];
     }
 }

@@ -36,7 +36,7 @@ class DocumentUploadedNotification extends Notification
             'type'    => 'document_uploaded',
             'title'   => 'Document Mpya',
             'message' => "Document '{$this->document->title}' added.",
-            'url'     => url('/my-documents'),
+            'url'     => route('my.documents'),
         ];
     }
 }
