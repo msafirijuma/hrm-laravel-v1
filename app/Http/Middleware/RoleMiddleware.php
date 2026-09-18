@@ -9,13 +9,13 @@ use Symfony\Component\HttpFoundation\Response;
 
 class RoleMiddleware
 {
+
     public function handle(Request $request, Closure $next, ...$roles): Response
     {
         if (!Auth::check()) {
             return redirect()->route('login');
         }
 
-        /** @var \App\Models\User $user */
         $user = Auth::user();
 
         foreach ($roles as $role) {
@@ -24,6 +24,6 @@ class RoleMiddleware
             }
         }
 
-        abort(403, 'You are not authorized to access this resource.');
+        abort(403);
     }
 }

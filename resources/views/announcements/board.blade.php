@@ -42,40 +42,40 @@
     }
     .pagination {
     display: flex;
-    gap: 6px;                    /* space kati ya buttons */
+    gap: 6px;                    
     align-items: center;
     justify-content: center;
     flex-wrap: wrap;
-}
+    }
 
-.pagination .page-item .page-link 
-border-radius: 8px !important;
-    min-width: 36px;
-    text-align: center;{
+    .pagination .page-item .page-link 
     border-radius: 8px !important;
-    min-width: 36px;
-    text-align: center;
-    border: 1px solid #dee2e6;
-    color: #495057;
-    padding: 0.4rem 0.75rem;
-    transition: all 0.2s ease;
-}
+        min-width: 36px;
+        text-align: center;{
+        border-radius: 8px !important;
+        min-width: 36px;
+        text-align: center;
+        border: 1px solid #dee2e6;
+        color: #495057;
+        padding: 0.4rem 0.75rem;
+        transition: all 0.2s ease;
+    }
 
-.pagination .page-item.active .page-link {
-    background-color: #0d6efd;
-    border-color: #0d6efd;
-    color: #fff;
-}
+    .pagination .page-item.active .page-link {
+        background-color: #0d6efd;
+        border-color: #0d6efd;
+        color: #fff;
+    }
 
-.pagination .page-link:hover {
-    background-color: #e9ecef;
-    color: #0d6efd;
-}
+    .pagination .page-link:hover {
+        background-color: #e9ecef;
+        color: #0d6efd;
+    }
 
-.pagination .page-item.disabled .page-link {
-    color: #adb5bd;
-    background-color: #f8f9fa;
-}
+    .pagination .page-item.disabled .page-link {
+        color: #adb5bd;
+        background-color: #f8f9fa;
+    }
 </style>
 
 <div class="container-fluid">

@@ -52,12 +52,12 @@
                             </td>
                         </tr>
                         @empty
-                        {{-- <tr>
+                        <!-- {{-- <tr>
                                 <td colspan="7" class="text-center py-4 text-muted">
                                     <i class="fas fa-inbox fa-2x mb-2 d-block text-secondary"></i>
                                 No any pending request yet.
                             </td>
-                        </tr> --}}
+                        </tr> --}} -->
                         @endforelse
                     </tbody>
                 </table>

@@ -31,7 +31,7 @@
         @empty
             <div class="text-center py-5 text-muted">
                 <i class="fas fa-bell-slash fa-2x mb-2 d-block"></i>
-                Hakuna notifications
+                No any notification yet.
             </div>
         @endforelse
     </div>

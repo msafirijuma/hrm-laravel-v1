@@ -20,12 +20,6 @@ class NotificationController extends Controller
 
         $url = $notification->data['url'] ?? route('dashboard');
 
-        // $url = str_replace(
-        //     ['http://localhost/', 'https://localhost/'],
-        //     [rtrim(config('app.url'), '/') . '/', rtrim(config('app.url'), '/') . '/'],
-        //     $url
-        // );
-
         return redirect($url);
     }
 

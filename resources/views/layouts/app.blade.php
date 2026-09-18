@@ -10,13 +10,13 @@
         }
 
         .navbar-nav {
-        display: flex;
-        justify-content: end;
-        flex-direction: row;
-        padding-left: 0;
-        margin-bottom: 10px;
-        list-style: none;
-    }
+            display: flex;
+            justify-content: end;
+            flex-direction: row;
+            padding-left: 0;
+            margin-bottom: 10px;
+            list-style: none;
+        }
 
         .app-wrapper {
             display: flex;
@@ -306,8 +306,17 @@
             if (typeof Swal !== 'undefined') {
                 Swal.close();
             }
+
+            var badge = document.querySelector('.notification-badge'); 
+            if (badge) {
+                badge.style.display = 'none';
+            }
+
+            window.location.reload();
+            
         }
     });
+    
 </script>
 
 @yield('scripts')

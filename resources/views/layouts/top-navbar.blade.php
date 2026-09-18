@@ -9,7 +9,7 @@
             <i class="fas fa-bell"></i>
 
             @if(auth()->user()->unreadNotifications->count() > 0)
-                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+                <span class="notification-badge position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
                       style="font-size: 0.65rem; transform: translate(-60%, 30%) !important;">
                     {{ auth()->user()->unreadNotifications->count() }}
                 </span>

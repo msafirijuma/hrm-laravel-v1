@@ -27,7 +27,7 @@ class PublicHolidayReminderNotification extends Notification
             ->greeting('Hello ' . $notifiable->name . ',')
             ->line("Tomorrow is **{$this->holiday->name}**.")
             ->line('Date: ' . $this->holiday->date->format('d M Y'))
-            ->line('Remember: Only assigned staff are to be reporting to the office, otherwise have a good day.')
+            ->line('Remember: Only assigned staff are required to report to the office tomorrow. To everyone else, have a wonderful day!')
             ->action('View Holidays', route('public-holidays.calendar'))
             ->line('Thanks.');
     }

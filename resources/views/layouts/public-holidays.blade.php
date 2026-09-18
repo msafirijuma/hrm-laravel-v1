@@ -23,7 +23,7 @@
                             <i class="fas fa-umbrella-beach fa-lg text-white"></i>
                         </div>
                     </div>
-                </div>
+            </div>
 
                 @if($nextHoliday)
                 <div class="p-3 bg-light">
