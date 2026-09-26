@@ -183,11 +183,6 @@
                     <i class="fas fa-paper-plane me-3"></i> Apply for Leave
                 </a>
             </li>
-            <li class="nav-item mb-1">
-                <a href="{{ route('my.documents') }}" class="nav-link d-flex align-items-center @if (Route::currentRouteName() == 'my.documents') active @endif">
-                    <i class="fas fa-folder me-3"></i> My Documents
-                </a>
-            </li>
         @endif
 
         <!-- Admin Only -->
@@ -215,6 +210,11 @@
         <li class="nav-item mb-1">
             <a href="{{ route('my-payslips') }}" class="nav-link d-flex align-items-center @if (Route::currentRouteName() == 'my-payslips') active @endif">
                 <i class="fas fa-file-invoice me-3"></i> My Payslips
+            </a>
+        </li>
+        <li class="nav-item mb-1">
+            <a href="{{ route('my.documents') }}" class="nav-link d-flex align-items-center @if (Route::currentRouteName() == 'my.documents') active @endif">
+                <i class="fas fa-folder me-3"></i> My Documents
             </a>
         </li>
         <li class="nav-item mb-1">

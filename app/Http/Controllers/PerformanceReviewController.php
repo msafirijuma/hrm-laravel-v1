@@ -109,6 +109,7 @@ class PerformanceReviewController extends Controller
         }
 
         $performanceReview->load('employee.department', 'employee.position', 'reviewer');
+        
         return view('performance-reviews.show', compact('performanceReview'));
     }
 }

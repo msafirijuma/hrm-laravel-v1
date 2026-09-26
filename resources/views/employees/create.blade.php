@@ -50,7 +50,7 @@
                         </div>
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <label class="form-label">Contract End Date</label>
+                                <label class="form-label">Contract End Date <span class="text-danger">*</span></label>
                                 <input type="date" name="contract_end_date" class="form-control">
                             </div>
                         </div>
@@ -115,13 +115,23 @@
                         </div>
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <label class="form-label">Date of Birth <span class="text-muted">(Optional)</span></label>
-                                <input type="date" name="date_of_birth" class="form-control">
+                                <label for="date_of_birth" class="form-label">Date of Birth (Optional)</label>
+                                <input type="date" 
+                                    name="date_of_birth" 
+                                    id="date_of_birth" 
+                                    class="form-control @error('date_of_birth') is-invalid @enderror" 
+                                    value="{{ old('date_of_birth') }}">
+
+                                @error('date_of_birth')
+                                    <div class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
                             </div>
                         </div>
                     </div>
 
-                    <!-- Photo Upload -->
+                    <!-- Photo Upload & status -->
                     <div class="row">
                         <div class="col-md-6">
                             <div class="mb-4">

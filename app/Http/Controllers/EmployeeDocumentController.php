@@ -39,7 +39,7 @@ class EmployeeDocumentController extends Controller
             'type.in'        => 'Invalid type.',
             'file.required'  => 'Choose a file.',
             'file.file'      => 'Invalid file.',
-            'file.mimes'     => 'Accepted file format: PDF, DOC, DOCX, JPG, JPEG, PNG tu.',
+            'file.mimes'     => 'Accepted file format: PDF, DOC, DOCX, JPG, JPEG, PNG only.',
             'file.max'       => 'File cannot exceeds 5MB.',
             'notes.max'      => 'Notes cannot exceeds 500 character.',
         ]);
@@ -69,7 +69,7 @@ class EmployeeDocumentController extends Controller
 
     public function download(EmployeeDocument $document)
     {
-        // Security: HR/Admin or the employee themselves
+        // Security: HR/Admin or the employees themselves
         $user = auth()->user();
         if (!$user->hasAnyRole(['Super Admin', 'HR']) && $user->employee?->id !== $document->employee_id) {
             abort(403);
@@ -96,7 +96,7 @@ class EmployeeDocumentController extends Controller
         $employee = auth()->user()->employee;
 
         if (!$employee) {
-            abort(403, 'You are not authorized to access this site.');
+            abort(403, 'Access is denied. Contact your administrator for assistance.');
         }
 
         $documents = $employee->documents()->latest()->get();

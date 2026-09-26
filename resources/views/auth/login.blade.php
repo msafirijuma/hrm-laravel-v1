@@ -90,7 +90,7 @@
             position: 'top-end',
             showConfirmButton: false,
             timer: 4000,
-            timerProgressBar: true,
+            timerProgressBar: false,
             didOpen: (toast) => {
                 toast.onmouseenter = Swal.stopTimer;
                 toast.onmouseleave = Swal.resumeTimer;

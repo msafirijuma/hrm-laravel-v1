@@ -34,8 +34,8 @@ class DocumentUploadedNotification extends Notification
     {
         return [
             'type'    => 'document_uploaded',
-            'title'   => 'Document Mpya',
-            'message' => "Document '{$this->document->title}' added.",
+            'title'   => 'New Document',
+            'message' => "Document: {$this->document->title} added to profile.",
             'url'     => route('my.documents'),
         ];
     }

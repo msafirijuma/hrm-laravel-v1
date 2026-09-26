@@ -33,7 +33,7 @@
                     <thead class="table-dark">
                         <tr>
                             <th>Month</th>
-                            <th>Employee</th>
+                            <th>payroll</th>
                             <th>Department</th>
                             <th>Basic Salary</th>
                             <th>Net Salary</th>
@@ -55,33 +55,39 @@
                                 </span>
                             </td>
                             <td>
+
+                                <!-- Mark as paid Button -->
                                 @if($payroll->status !== 'paid')
-                                    <form action="{{ route('payrolls.mark-paid', $payroll) }}" method="POST" style="display:inline;">
+                                    <form id="mark-payroll-form-{{ $payroll->id }}" action="{{ route('payrolls.mark-paid', $payroll) }}" method="POST" style="display:inline;">
                                         @csrf
-                                        <button type="submit" class="btn btn-sm btn-success"
-                                                onclick="return confirm('Are you sure you paid this payrol?')">
-                                            <i class="fas fa-check-circle"></i> Paid
-                                        </button>
                                     </form>
+
+                                    <button type="submit" class="btn btn-sm btn-success"
+                                        onclick="triggerMarkAsPaid({{ $payroll->id }}, '{{ $payroll->employee->first_name }} {{ $payroll->employee->last_name }}')" class="btn btn-sm btn-danger" title="Mark payroll as paid">
+                                        <i class="fas fa-check-circle"></i> Paid
+                                    </button>
                                 @endif
 
-                                <a href="{{ route('payrolls.show', $payroll) }}" class="btn btn-sm btn-info">
+                                <!-- View Button -->
+                                <button type="button" onclick="triggerView('{{ route('payrolls.show', $payroll) }}')" class="btn btn-sm btn-info text-white" title="View Payroll">
                                     <i class="fas fa-eye"></i>
-                                </a>
-                                
-                                <a href="{{ route('payrolls.edit', $payroll) }}" class="btn btn-sm btn-warning">
-                                    <i class="fas fa-edit"></i>
-                                </a>
+                                </button>
 
-                                <!-- Delete -->
-                                <form action="{{ route('payrolls.destroy', $payroll) }}" method="POST" style="display:inline;">
+                                <!-- Edit Button -->
+                                <button type="button" onclick="triggerEdit('{{ route('payrolls.edit', $payroll) }}')" class="btn btn-sm btn-warning" title="Edit Payroll">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+
+                                <!-- Delete Form -->
+                                <form id="delete-payroll-form-{{ $payroll->id }}" action="{{ route('payrolls.destroy', $payroll) }}" method="POST" style="display:none !important;">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="btn btn-sm btn-danger"
-                                            onclick="return confirm('Are you canceling this payroll? This action cannot be undone!')">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
                                 </form>
+
+                                <!-- Delete Button -->
+                                <button type="button" onclick="triggerDelete({{ $payroll->id }}, '{{ $payroll->employee->first_name }} {{ $payroll->employee->last_name }}' , '{{ $payroll->month }}')" class="btn btn-sm btn-danger" title="Delete Payroll">
+                                    <i class="fas fa-trash"></i>
+                                </button>
                             </td>
                         </tr>
                         @empty
@@ -94,4 +100,88 @@
             </div>
         </div>
     </div>
+@endsection
+
+@section('scripts')
+<script>
+    // Loader function during page navigation
+    function showPageLoader(message) {
+        Swal.fire({
+            title: 'Please wait...',
+            text: message,
+            allowOutsideClick: false,
+            didOpen: () => {
+                Swal.showLoading();
+            }
+        });
+    }
+
+    // SweetAlert during view action
+    function triggerView(url) {
+        showPageLoader('We are loading payroll details...');
+        window.location.href = url;
+    }
+
+    // SweetAlert during edit action
+    function triggerEdit(url) {
+        showPageLoader('We are preparing edit payroll form...');
+        window.location.href = url;
+    }
+
+    // SweetAlert confirmation (mark payroll as paid)
+    function triggerMarkAsPaid(id, employee) {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: `You will be marking payroll for ${employee} as paid.`,
+            icon: 'success',
+            showCancelButton: true,
+            confirmButtonColor: '#198754',
+            cancelButtonColor: '#6c757d',
+            confirmButtonText: 'Yes, Mark!',
+            cancelButtonText: 'Cancel',
+            allowOutsideClick: false
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Loader during the deletion process
+                Swal.fire({
+                    title: 'Marking...',
+                    text: 'Please wait while payroll is being marked as paid.',
+                    allowOutsideClick: false,
+                    didOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
+                document.getElementById('mark-payroll-form-' + id).submit();
+            }
+        });
+    }
+
+    // SweetAlert confirmation during deletion of payroll
+    function triggerDelete(id, employee, month) {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: `You will delete the payroll record '${month}' for David Kimaro from the system. This action cannot be undone!`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#dc3545',
+            cancelButtonColor: '#6c757d',
+            confirmButtonText: 'Yes, Delete!',
+            cancelButtonText: 'Cancel',
+            allowOutsideClick: false
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Loader during the deletion process
+                Swal.fire({
+                    title: 'Deleting...',
+                    text: 'Please wait while payroll data is being deleted.',
+                    allowOutsideClick: false,
+                    didOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
+                document.getElementById('delete-payroll-form-' + id).submit();
+            }
+        });
+    }
+</script>
 @endsection

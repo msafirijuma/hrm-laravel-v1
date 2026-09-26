@@ -74,7 +74,7 @@
             @empty
                 <li class="px-3 py-4 text-center text-muted small">
                     <i class="fas fa-inbox fa-2x mb-2 d-block opacity-50"></i>
-                    Hakuna notifications
+                    No any notification at the moment.
                 </li>
             @endforelse
 

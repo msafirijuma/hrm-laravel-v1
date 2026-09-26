@@ -41,7 +41,7 @@
                 <textarea name="notes" class="form-control" rows="2"></textarea>
             </div>
             <button type="submit" class="btn btn-success">Upload</button>
-            <a href="{{ route('employees.documents.index', $employee) }}" class="btn btn-secondary">Ghairi</a>
+            <a href="{{ route('employees.documents.index', $employee) }}" class="btn btn-secondary">Cancel</a>
         </form>
     </div>
 </div>

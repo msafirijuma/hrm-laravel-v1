@@ -87,7 +87,7 @@
     </div>
 
     <div class="row justify-content-start">
-        <div class="col-lg-9">
+        <div class="col-lg-12">
             @forelse($announcements as $announcement)
             <div class="card announcement-card border-0 shadow-sm mb-4 overflow-hidden priority-{{ $announcement->priority }}">
                 <!-- Priority bar -->

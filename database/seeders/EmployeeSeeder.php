@@ -18,17 +18,17 @@ class EmployeeSeeder extends Seeder
 
         $users = [
             [
-                'name' => 'Admin User',
+                'name' => 'Msafiri Juma',
                 'email' => 'admin@company.com',
                 'password' => Hash::make('password'),
                 'role' => 'Super Admin',
                 'employee' => [
                     'employee_number' => 'ADM001',
-                    'first_name' => 'Admin',
-                    'last_name' => 'User',
-                    'phone' => '0711111111',
+                    'first_name' => 'Msafiri',
+                    'last_name' => 'Juma',
+                    'phone' => '0749696868',
                     'email' => 'admin@company.com',
-                    'date_of_birth' => '1990-01-01',
+                    'date_of_birth' => '1997-04-25',
                     'date_hired' => '2022-01-01',
                     'gender' => 'Male',
                     'basic_salary' => 1200000,
@@ -38,7 +38,7 @@ class EmployeeSeeder extends Seeder
                 ]
             ],
             [
-                'name' => 'John Kamanda',
+                'name' => 'John Temba',
                 'email' => 'manager@company.com',
                 'password' => Hash::make('password'),
                 'role' => 'Manager',
@@ -58,7 +58,7 @@ class EmployeeSeeder extends Seeder
                 ]
             ],
             [
-                'name' => 'Ahmed Msafiri',
+                'name' => 'Ahmed Issa',
                 'email' => 'ahmed@company.com',
                 'password' => Hash::make('password'),
                 'role' => 'HR',
@@ -98,7 +98,7 @@ class EmployeeSeeder extends Seeder
                 ]
             ],
             [
-                'name' => 'Ashura Mwinyi',
+                'name' => 'Ashura Ally',
                 'email' => 'ashura@company.com',
                 'password' => Hash::make('password'),
                 'role' => 'Employee',
@@ -118,7 +118,7 @@ class EmployeeSeeder extends Seeder
                 ]
             ],
             [
-                'name' => 'Sarah Mwangi',
+                'name' => 'Sarah Johanes',
                 'email' => 'sarah@company.com',
                 'password' => Hash::make('password'),
                 'role' => 'Employee',
@@ -138,7 +138,7 @@ class EmployeeSeeder extends Seeder
                 ]
            ],
            [
-                'name' => 'David Kimaro',
+                'name' => 'David Jumbe',
                 'email' => 'david@company.com',
                 'password' => Hash::make('password'),
                 'role' => 'Employee',

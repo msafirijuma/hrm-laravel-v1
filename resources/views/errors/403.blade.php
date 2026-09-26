@@ -15,18 +15,18 @@
                 </div>
 
                 <h1 class="display-5 fw-bold text-muted mb-2">403</h1>
-                <h4 class="fw-semibold mb-3">Huna ruhusa</h4>
+                <h4 class="fw-semibold mb-3">No permission</h4>
                 <p class="text-muted mb-4">
-                    Huna ruhusa ya kufikia ukurasa huu.
-                    Rudi dashboard au wasiliana na msimamizi wa mfumo.
+                    Access is denied.
+                    Back to dashboard or contact IT support team.
                 </p>
 
                 <div class="d-flex gap-2 justify-content-center flex-wrap">
                     <a href="{{ route('dashboard') }}" class="btn btn-primary">
-                        <i class="fas fa-home me-1"></i> Rudi Dashboard
+                        <i class="fas fa-home me-1"></i> Dashboard
                     </a>
                     <a href="javascript:history.back()" class="btn btn-outline-secondary">
-                        <i class="fas fa-arrow-left me-1"></i> Rudi Nyuma
+                        <i class="fas fa-arrow-left me-1"></i> Back
                     </a>
                 </div>
             </div>

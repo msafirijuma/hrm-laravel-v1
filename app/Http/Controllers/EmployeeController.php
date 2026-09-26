@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
+use Carbon\Carbon;
 
 class EmployeeController extends Controller
 {
@@ -37,44 +38,49 @@ class EmployeeController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
-            'first_name' => 'required|string|max:255',
-            'last_name' => 'required|string|max:255',
-            'email' => 'required|email|unique:employees,email',
-            'phone' => 'required|string',
+        // Minimum user's age = 15 years
+        $minAgeDate = now()->subYears(15)->format('Y-m-d');
+
+        // 2. Validation
+        $validated = $request->validate([
+            'first_name'    => 'required|string|max:255',
+            'last_name'     => 'required|string|max:255',
+            'email'         => 'required|email|unique:employees,email',
+            'phone'         => 'required|string',
             'department_id' => 'required|exists:departments,id',
-            'position_id' => 'required|exists:positions,id',
-            'date_hired' => 'required|date',
-            'gender' => 'required|in:Male,Female',
-            'basic_salary' => 'required|numeric|min:0',
-            'role' => 'required|exists:roles,name',
-            'status' => 'required|in:active,on_leave,inactive,terminated',
-            'photo' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'position_id'   => 'required|exists:positions,id',
+            'date_hired'    => 'required|date',
+            'contract_end_date' => 'nullable|date', 
+            'date_of_birth' => 'nullable|date|before_or_equal:' . $minAgeDate,
+            'gender'        => 'required|in:Male,Female',
+            'basic_salary'  => 'required|numeric|min:0',
+            'role'          => 'required', 
+            'status'        => 'required|in:active,inactive,terminated',
+            'photo'         => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+        ], [
+            'date_of_birth.before_or_equal' => 'Employee must be at least 15 years old.',
         ]);
 
-        // Create User Account
+        
         $user = User::create([
-            'name' => $request->first_name . ' ' . $request->last_name,
-            'email' => $request->email,
-            'password' => Hash::make('password'),   // Default password
+            'name'     => $request->first_name . ' ' . $request->last_name,
+            'email'    => $request->email,
+            'password' => Hash::make('password'),
         ]);
 
         // Assign Role
-        if (!$request->role) {
-            $user->assignRole('Employee');  // Default role
+        if ($request->filled('role')) {
+            $user->assignRole($request->role);
         } else {
-            $user->assignRole($request->role); // Role selected
+            $user->assignRole('Employee');
         }
 
-        // Create Employee
-        $data = $request->all();
+        // Preparing Employee data
+        $data = $request->except(['_token', 'role']);
         $data['user_id'] = $user->id;
 
-        if ($request->filled('date_of_birth')) {
-            $data['date_of_birth'] = $request->date_of_birth;
-        } else {
-            $data['date_of_birth'] = null; // Set to null if not provided
-        }
+        // Null if not provided
+        $data['date_of_birth'] = $request->filled('date_of_birth') ? $request->date_of_birth : null;
 
         if ($request->hasFile('photo')) {
             $data['photo'] = $request->file('photo')->store('employees', 'public');
@@ -83,8 +89,9 @@ class EmployeeController extends Controller
         Employee::create($data);
 
         return redirect()->route('employees.index')
-            ->with('success', 'Employee added successfully! Account created (Default Password: password)');
+            ->with('success', 'Employee added successfully!');
     }
+
 
     public function show(Employee $employee)
     {
@@ -101,6 +108,9 @@ class EmployeeController extends Controller
 
     public function update(Request $request, Employee $employee)
     {
+        // Minimum user's age = 15 years
+        $minAgeDate = now()->subYears(15)->format('Y-m-d');
+
         $request->validate([
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
@@ -109,13 +119,18 @@ class EmployeeController extends Controller
             'department_id' => 'required|exists:departments,id',
             'position_id' => 'required|exists:positions,id',
             'date_hired' => 'required|date',
-            'date_of_birth' => 'nullable|date',
+            'date_of_birth' => 'nullable|date|before_or_equal:' . $minAgeDate,
             'gender' => 'required|in:Male,Female',
             'basic_salary' => 'nullable|numeric|min:0',
             'role' => 'required|exists:roles,name',
             'status' => 'required|in:active,on_leave,inactive,terminated',
             'photo' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
-        ]);
+            ],
+            [
+                // Custom error message if the age validation requirement fails
+                'date_of_birth.before_or_equal' => 'Employee must be at least 15 years old.',
+            ]
+        );
 
         $data = $request->all();
 

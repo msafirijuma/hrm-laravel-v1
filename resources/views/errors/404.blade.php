@@ -15,13 +15,13 @@
                 </div>
 
                 <h1 class="display-5 fw-bold text-muted mb-2">404</h1>
-                <h4 class="fw-semibold mb-3">Ukurasa haupatikani</h4>
+                <h4 class="fw-semibold mb-3">Page is not found</h4>
                 <p class="text-muted mb-4">
-                    Ukurasa uliouomba haupo au umehamishwa.
+                    The requested page is either deleted or moved.
                 </p>
 
                 <a href="{{ route('dashboard') }}" class="btn btn-primary">
-                    <i class="fas fa-home me-1"></i> Rudi Dashboard
+                    <i class="fas fa-home me-1"></i> Dashboard
                 </a>
             </div>
         </div>

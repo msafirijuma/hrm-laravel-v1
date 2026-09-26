@@ -77,13 +77,13 @@ class PayrollController extends Controller
         // Prevent deletion (status is paid)
         if ($payroll->status === 'paid') {
             return redirect()->route('payrolls.index')
-                            ->with('error', 'Huwezi kufuta payroll ambayo imeshalipwa.');
+                            ->with('error', 'Unable to delete: This payroll has already been processed and paid out.');
         }
 
         $payroll->delete();
 
         return redirect()->route('payrolls.index')
-                        ->with('success', 'Payroll imefutwa kwa mafanikio.');
+                        ->with('success', 'Payroll deleted successfully!');
     }
 
     // ************************ BULK PAYROLL ************************
@@ -108,7 +108,7 @@ class PayrollController extends Controller
 
         if ($existingCount > 0) {
             return redirect()->route('payrolls.index')
-                ->with('error', "Payrolls za mwezi {$month} zimeshatengenezwa ({$existingCount} records). Unaweza kuhariri tu, si ku-generate upya.");
+                ->with('error', "Payrolls for {$month} already exist ({$existingCount} records). Only editing is allowed; generation is blocked.");
         }
 
         $query = Employee::with('department', 'position')->where('status', 'active');
@@ -135,7 +135,7 @@ class PayrollController extends Controller
         // Double-check
         if (Payroll::where('month', $month)->exists()) {
             return redirect()->route('payrolls.index')
-                ->with('error', "Payrolls za mwezi {$month} zimeshatengenezwa. Generate imezuiwa.");
+                ->with('error', "Payrolls for {$month} already exist. Generation blocked.");
         }
 
         $created = 0;
@@ -162,8 +162,8 @@ class PayrollController extends Controller
             if ($payroll->employee && $payroll->employee->user) {
                 $payroll->employee->user->notify(new PayrollGeneratedNotification($payroll));
             }
-                        $created++;
-                    }
+            $created++;
+        }
 
         return redirect()->route('payrolls.index')
             ->with('success', "Payroll prepared for employees {$created} for the month {$month}");
@@ -238,7 +238,7 @@ class PayrollController extends Controller
         ]);
 
         return redirect()->back()
-            ->with('success', 'Payroll for ' . $payroll->employee->first_name . ' marked as Paid!');
+            ->with('success', 'Payroll for ' . $payroll->employee->first_name . ' marked as paid!');
     }
 
     // Edit Payroll
@@ -306,7 +306,7 @@ class PayrollController extends Controller
         $employee = $user->employee;
 
         if (!$employee) {
-            abort(403, 'Huna taarifa za mfanyakazi.');
+            abort(403);
         }
 
         $payrolls = Payroll::where('employee_id', $employee->id)

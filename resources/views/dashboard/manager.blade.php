@@ -55,7 +55,7 @@
                                 <tr>
                                     <th>Name</th>
                                     <th>Position</th>
-                                    <th>Hire date</th>
+                                    <th style="width: 120px; min-width: 120px">Hire date</th>
                                     <th>Phone</th>
                                     <th>Email</th>
                                     <th>Status</th>
@@ -109,7 +109,7 @@
                     <thead class="table-dark">
                         <tr>
                             <th>Employee</th>
-                            <th>Leave Type</th>
+                            <th style="width: 120px; min-width: 120px">Leave Type</th>
                             <th>From</th>
                             <th>To</th>
                             <th>Days</th>
@@ -165,13 +165,13 @@
                         </a>
                     </div>
                     <div class="col-12 col-md-3">
-                        <a href="{{ route('my-profile') }}" class="btn btn-info btn-lg w-100 py-4">
+                        <a href="{{ route('my-profile') }}" class="btn btn-info btn-lg w-100 py-4 text-light">
                             <i class="fas fa-user fa-2x d-block mb-2"></i>
                             My Profile
                         </a>
                     </div>
                     <div class="col-12 col-md-3">
-                        <a href="{{ route('my-payslips') }}" class="btn btn-warning btn-lg w-100 py-4">
+                        <a href="{{ route('my-payslips') }}" class="btn btn-warning btn-lg w-100 py-4 text-light">
                             <i class="fas fa-file-invoice fa-2x d-block mb-2"></i>
                             My Payslips
                         </a>

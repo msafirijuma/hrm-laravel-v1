@@ -345,10 +345,16 @@ class DashboardController extends Controller
     {
         $employee = Auth::user()->employee;
 
+        // Minimum user's age = 15 years
+        $minAgeDate = now()->subYears(15)->format('Y-m-d');
+
         $request->validate([
             'phone' => 'required|string',
-            'date_of_birth' => 'nullable|date',
+            'date_of_birth' => 'nullable|date|before_or_equal:' . $minAgeDate,
             'photo' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+        ],
+        [
+            'date_of_birth.before_or_equal' => 'Employee must be at least 15 years old.',
         ]);
 
         $data = $request->only(['phone', 'date_of_birth']);
@@ -359,6 +365,9 @@ class DashboardController extends Controller
             }
             $data['photo'] = $request->file('photo')->store('employees', 'public');
         }
+
+        // Null if not provided
+        $data['date_of_birth'] = $request->filled('date_of_birth') ? $request->date_of_birth : null;
 
         $employee->update($data);
 

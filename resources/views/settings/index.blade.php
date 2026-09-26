@@ -18,9 +18,6 @@
                     <a href="#general" class="nav-link settings-tab active" data-target="general">
                         <i class="fas fa-cog me-2"></i> General
                     </a>
-                    <a href="#security" class="nav-link settings-tab" data-target="security">
-                        <i class="fas fa-shield-alt me-2"></i> Security
-                    </a>
                     <a href="#appearance" class="nav-link settings-tab" data-target="appearance">
                         <i class="fas fa-palette me-2"></i> Appearance
                     </a>
@@ -121,33 +118,6 @@
 
                         <button type="submit" class="btn btn-primary">
                             <i class="fas fa-save me-1"></i> Save
-                        </button>
-                    </form>
-                </div>
-            </div>
-        </div>
-
-        <!-- SECURITY -->
-        <div class="settings-panel d-none" id="panel-security">
-            <div class="card border-0">
-                <div class="card-body p-4">
-                    <h5 class="fw-bold mb-4">Security Settings</h5>
-                    <form action="{{ route('settings.security') }}" method="POST">
-                        @csrf
-                        <div class="mb-3">
-                            <label class="form-label text-muted">Current Password</label>
-                            <input type="password" name="current_password" class="form-control bg-dark text-white border-secondary" required>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label text-muted">New Password</label>
-                            <input type="password" name="new_password" class="form-control bg-dark text-white border-secondary" required>
-                        </div>
-                        <div class="mb-4">
-                            <label class="form-label text-muted">Confirm New Password</label>
-                            <input type="password" name="new_password_confirmation" class="form-control bg-dark text-white border-secondary" required>
-                        </div>
-                        <button type="submit" class="btn btn-primary">
-                            <i class="fas fa-save me-1"></i> Update 
                         </button>
                     </form>
                 </div>

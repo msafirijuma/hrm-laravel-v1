@@ -61,6 +61,7 @@ Route::middleware('auth')->group(function () {
         // Reject leave request
         Route::post('/leave-requests/{id}/reject', [LeaveRequestController::class, 'reject'])->name('leave-requests.reject');
 
+        // Leave Usage
         Route::get('/reports/leave-usage', [DashboardController::class, 'leaveUsageReport'])
             ->name('reports.leave-usage');
 
@@ -95,16 +96,21 @@ Route::middleware('auth')->group(function () {
         Route::get('/performance-reviews', [PerformanceReviewController::class, 'index'])->name('performance-reviews.index');
         Route::get('/performance-reviews/create', [PerformanceReviewController::class, 'create'])->name('performance-reviews.create');
         Route::post('/performance-reviews', [PerformanceReviewController::class, 'store'])->name('performance-reviews.store');
-        // Route::get('/performance-reviews/{performanceReview}', [PerformanceReviewController::class, 'show'])->name('performance-reviews.show');
+        Route::get('/performance-reviews/{performanceReview}', [PerformanceReviewController::class, 'show'])->name('performance-reviews.show');
+
+        Route::get('/team-attendance', [DashboardController::class, 'teamAttendance'])->name('team.attendance');
+        Route::get('/mark-attendance', [DashboardController::class, 'markAttendanceForm'])->name('attendance.mark');
+        Route::post('/mark-attendance', [DashboardController::class, 'storeAttendance'])->name('attendance.store');
     });
 
     // Manager Routes
     Route::middleware('role:Manager')->group(function () {
         Route::get('/team-members', [DashboardController::class, 'teamMembers'])->name('team.members');
         Route::get('/team-leaves', [DashboardController::class, 'teamLeaves'])->name('team.leaves');
-        Route::get('/team-attendance', [DashboardController::class, 'teamAttendance'])->name('team.attendance');
-        Route::get('/mark-attendance', [DashboardController::class, 'markAttendanceForm'])->name('attendance.mark');
-        Route::post('/mark-attendance', [DashboardController::class, 'storeAttendance'])->name('attendance.store');
+
+        // Route::get('/team-attendance', [DashboardController::class, 'teamAttendance'])->name('team.attendance');
+        // Route::get('/mark-attendance', [DashboardController::class, 'markAttendanceForm'])->name('attendance.mark');
+        // Route::post('/mark-attendance', [DashboardController::class, 'storeAttendance'])->name('attendance.store');
     });
 
     // All Authenticated Users (Employee, Manager, HR)

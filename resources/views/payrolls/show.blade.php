@@ -114,7 +114,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="mt-4 text-center">
+                <div class="d-flex justify-content-evenly align-items-center flex-wrap gap-2 mt-4 text-center">
                     <!-- Back to payrolls -->
                     <a href="{{ route('payrolls.index') }}" class="btn btn-secondary me-2 mb-2 mb-md-0">
                         <i class="fas fa-arrow-left"></i> Back to Payrolls
@@ -134,15 +134,16 @@
                         <i class="fas fa-edit"></i> Edit
                     </a>
 
-                    <!-- Mark as Paid -->
+                    <!-- Mark as paid Button -->
                     @if($payroll->status !== 'paid')
-                        <form action="{{ route('payrolls.mark-paid', $payroll) }}" method="POST" style="display:inline;">
+                        <form id="mark-payroll-form-{{ $payroll->id }}" action="{{ route('payrolls.mark-paid', $payroll) }}" method="POST" style="display:inline;">
                             @csrf
-                            <button type="submit" class="btn btn-success mt-0 mt-md-2"
-                                    onclick="return confirm('Una uhakika umelipa mshahara huu?')">
-                                <i class="fas fa-check-circle"></i> Mark as Paid
-                            </button>
                         </form>
+
+                        <button type="submit" class="btn btn-sm btn-success py-2"
+                            onclick="triggerMarkAsPaid({{ $payroll->id }}, '{{ $payroll->employee->first_name }} {{ $payroll->employee->last_name }}')" class="btn btn-sm btn-danger" title="Mark payroll as paid">
+                            <i class="fas fa-check-circle"></i> Mark As Paid
+                        </button>
                     @endif
                 </div> 
             </div>
@@ -151,7 +152,6 @@
 @endsection
 
 @section('styles')
-
 <style>
 
     @media screen {
@@ -201,3 +201,46 @@
     }
 </style>
 @endsection
+
+@section('scripts')
+<script>
+    // Loader function during page navigation
+    function showPageLoader(message) {
+        Swal.fire({
+            title: 'Please wait...',
+            text: message,
+            allowOutsideClick: false,
+            didOpen: () => {
+                Swal.showLoading();
+            }
+        });
+    }
+
+    // SweetAlert confirmation (mark payroll as paid)
+    function triggerMarkAsPaid(id, employee) {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: `You will be marking payroll for ${employee} as paid.`,
+            icon: 'success',
+            showCancelButton: true,
+            confirmButtonColor: '#198754',
+            cancelButtonColor: '#6c757d',
+            confirmButtonText: 'Yes, Mark!',
+            cancelButtonText: 'Cancel',
+            allowOutsideClick: false
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Loader during the deletion process
+                Swal.fire({
+                    title: 'Marking Payroll...',
+                    text: 'Please wait while payroll is being marked as paid.',
+                    allowOutsideClick: false,
+                    didOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
+                document.getElementById('mark-payroll-form-' + id).submit();
+            }
+        });
+    }
+</script>
